@@ -1,6 +1,7 @@
-import MenuIcon, { routes } from "@/constants/layout";
+import { routes } from "@/constants/layout";
 import { cn } from "@/utils";
 import { NavLink } from "react-router-dom";
+import MenuIcon from "./MenuIcon";
 
 const Menu = () => {
   return (
@@ -9,7 +10,7 @@ const Menu = () => {
       <NavLink
         to={""}
         className={`rounded-full w-fit p-3 transition-all duration-150`}
-        children={({}) => (
+        children={() => (
           <div className={`flex items-center w-full`}>
             <div className="size-[60px] bg-blue rounded-full "></div>
           </div>

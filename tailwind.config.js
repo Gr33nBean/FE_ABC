@@ -14,9 +14,9 @@ export default {
         'extra-light-gray': '#E1E8ED',
         'extra-extra-light-gray': '#F5F8FA',
       },
+
       fontFamily: {
-        sans: ['Graphik', 'sans-serif'],
-        serif: ['Merriweather', 'serif'],
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },

@@ -2,14 +2,15 @@ import { routes } from "@/constants/layout";
 import { cn } from "@/utils";
 import { NavLink } from "react-router-dom";
 import MenuIcon from "./MenuIcon";
+import MoreButton from "./MoreButton";
 
 const Menu = () => {
   return (
-    <nav className="w-full flex flex-col">
+    <nav className="w-full flex flex-col items-center lg:items-start">
       {/* Logo */}
       <NavLink
         to={""}
-        className={`rounded-full w-fit p-3 transition-all duration-150`}
+        className={`rounded-full w-fit p-3  transition-all duration-150`}
         children={() => (
           <div className={`flex items-center w-full`}>
             <div className="size-[60px] bg-blue rounded-full "></div>
@@ -48,18 +49,21 @@ const Menu = () => {
           activeIcon: <MenuIcon isActive={true} type="approve" />,
           name: "Phê duyệt",
           to: routes.approve,
+          canBeHiden: true,
         },
         {
           icon: <MenuIcon type="resource" />,
           activeIcon: <MenuIcon isActive={true} type="resource" />,
           name: "Tài nguyên",
           to: routes.resource,
+          canBeHiden: true,
         },
         {
           icon: <MenuIcon type="document" />,
           activeIcon: <MenuIcon isActive={true} type="document" />,
           name: "Tài liệu",
           to: routes.document,
+          canBeHiden: true,
         },
         {
           icon: <MenuIcon type="profile" />,
@@ -71,17 +75,18 @@ const Menu = () => {
         <NavLink
           key={index}
           to={item.to}
-          className="rounded-full w-fit hover:bg-extra-extra-light-gray  pl-3 py-1 transition-all duration-150 pr-6"
+          className={cn(
+            "rounded-full w-fit hover:bg-extra-extra-light-gray pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6",
+            item.canBeHiden && "[@media(min-height:1000px)]:!block hidden "
+          )}
           children={({ isActive }) => (
-            <div
-              className={`flex items-center w-full transition-all duration-150`}
-            >
+            <div className={`flex items-center transition-all duration-150`}>
               <div className="size-fit transition-all duration-150">
                 {isActive ? item.activeIcon : item.icon}
               </div>
               <p
                 className={cn(
-                  "pl-6 text-[24px] transition-all duration-150",
+                  "pl-6 text-[24px] transition-all duration-150 hidden lg:!block",
                   isActive ? "font-extrabold" : "font-normal"
                 )}
               >
@@ -91,6 +96,10 @@ const Menu = () => {
           )}
         />
       ))}
+
+      <div className="[@media(min-height:1000px)]:hidden ">
+        <MoreButton />
+      </div>
     </nav>
   );
 };

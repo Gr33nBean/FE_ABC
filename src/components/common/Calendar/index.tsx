@@ -11,7 +11,7 @@ const Calendar = () => {
   });
 
   const handleChange = (increase: boolean) => {
-    let newDate = new Date(monthAndYear.year, monthAndYear.month - 1, 1);
+    const newDate = new Date(monthAndYear.year, monthAndYear.month - 1, 1);
 
     if (increase) {
       newDate.setMonth(newDate.getMonth() + 1);

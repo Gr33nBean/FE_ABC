@@ -82,7 +82,7 @@ export const AllType: TypeItem[] = [
 ];
 
 export function getColorFromType(type: string) {
-  let res = AllType.find((item) =>
+  const res = AllType.find((item) =>
     item.items.find(
       (i) =>
         i.label.trim().toLocaleLowerCase() === type.trim().toLocaleLowerCase()

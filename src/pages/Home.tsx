@@ -5,24 +5,7 @@ import Event from "@/components/common/Event";
 import { useState } from "react";
 import TodayEvent from "@/components/common/Event/TodayEvent";
 import Calendar from "@/components/common/Calendar";
-
-export enum TABS {
-  ALL = "ALL",
-  EVENT = "EVENT",
-  NEWS = "NEWS",
-  SHARING = "SHARING",
-  NOTIFICATION = "NOTIFICATION",
-  RECRUITMENT = "RECRUITMENT",
-}
-
-const tabs = [
-  { label: "Tất cả", value: TABS.ALL },
-  { label: "Sự kiện", value: TABS.EVENT },
-  { label: "Tin tức", value: TABS.NEWS },
-  { label: "Chia sẻ", value: TABS.SHARING },
-  { label: "Thông báo", value: TABS.NOTIFICATION },
-  { label: "Tuyển dụng", value: TABS.RECRUITMENT },
-];
+import { TABS, tabs } from "@/constants/home";
 
 const Home = () => {
   const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);

@@ -1,4 +1,4 @@
-const Avatar = () => {
+const AvatarButton = () => {
   return (
     <button className="flex items-center justify-center hover:bg-extra-extra-light-gray w-full rounded-full p-3 gap-3">
       <p className="size-[48px] aspect-square rounded-full bg-blue"></p>
@@ -43,4 +43,4 @@ const Avatar = () => {
   );
 };
 
-export default Avatar;
+export default AvatarButton;

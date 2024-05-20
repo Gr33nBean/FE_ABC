@@ -1,4 +1,4 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import MenuIcon from "../MenuIcon";
 import { routes } from "@/constants/layout";
 import { NavLink } from "react-router-dom";
@@ -6,8 +6,8 @@ import { cn } from "@/utils";
 
 const MoreButton = () => {
   return (
-    <Menu>
-      <MenuButton className="rounded-full w-fit hover:bg-extra-extra-light-gray  pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6 flex items-center ">
+    <Popover>
+      <PopoverButton className="rounded-full w-fit hover:bg-extra-extra-light-gray  pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6 flex items-center ">
         <span className="size-fit transition-all duration-150">
           <svg
             width="28"
@@ -84,10 +84,10 @@ const MoreButton = () => {
         <p className="pl-6 text-[24px] transition-all duration-150 font-normal hidden lg:!block">
           Thêm
         </p>
-      </MenuButton>
+      </PopoverButton>
 
-      <MenuItems
-        anchor="top"
+      <PopoverPanel
+        anchor="top start"
         className="bg-white rounded-xl shadow-2xl translate-y-[66px] "
       >
         {[
@@ -110,7 +110,7 @@ const MoreButton = () => {
             to: routes.document,
           },
         ].map((item, index) => (
-          <MenuItem key={index}>
+          <div key={index}>
             <NavLink
               to={item.to}
               className="w-full flex hover:bg-extra-extra-light-gray pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6"
@@ -132,10 +132,10 @@ const MoreButton = () => {
                 </div>
               )}
             />
-          </MenuItem>
+          </div>
         ))}
-      </MenuItems>
-    </Menu>
+      </PopoverPanel>
+    </Popover>
   );
 };
 

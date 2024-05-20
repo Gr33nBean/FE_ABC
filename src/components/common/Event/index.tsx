@@ -1,8 +1,10 @@
-import ThreeDotsIcon from '@/assets/icons/three-dots.svg';
-import Tag from './Tag';
-import ArrowRightIcon from '@/assets/icons/arrow-right.svg';
+import ThreeDotsIcon from "@/assets/images/Home/three-dots.svg";
+import ArrowRightIcon from "@/assets/images/Home/arrow-right.svg";
+import Tag from "../Tag";
+import { getColorFromType } from "@/constants/type";
+import Avatar from "../Avatar";
 
-type PostProps = {
+type EventProps = {
   name: string;
   time: string;
   tag: string;
@@ -14,7 +16,7 @@ type PostProps = {
   to: string;
 };
 
-const Post = ({
+const Event = ({
   name,
   time,
   tag,
@@ -24,15 +26,12 @@ const Post = ({
   room,
   from,
   to,
-}: PostProps) => {
+}: EventProps) => {
   return (
     <div
       className={`w-full flex flex-row px-5 py-3 gap-2 border-b-[0.5px] border-extra-light-gray`}
     >
-      <img
-        src='https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'
-        className={` w-12 h-12 rounded-full object-cover`}
-      />
+      <Avatar />
 
       <div className={`gap-3 w-full`}>
         <div className={`w-full flex flex-row justify-between items-center`}>
@@ -40,7 +39,7 @@ const Post = ({
           <div className={`flex flex-row items-center gap-3`}>
             <p className={`text-base font-normal text-dark-gray`}>{time}</p>
             <button>
-              <img src={ThreeDotsIcon} alt='three-dots' />
+              <img src={ThreeDotsIcon} alt="three-dots" />
             </button>
           </div>
         </div>
@@ -48,7 +47,7 @@ const Post = ({
         <div className={`gap-1`}>
           <div className={`flex flex-row  items-center justify-between`}>
             <div className={`flex flex-row gap-3`}>
-              <Tag text={tag} />
+              <Tag text={tag} color={getColorFromType(tag)} />
               <p className={`text-lg font-semibold text-black`}>{title}</p>
             </div>
             <p className={` text-sm font-normal text-dark-gray`}>
@@ -56,7 +55,7 @@ const Post = ({
             </p>
           </div>
 
-          <p className='text-ellipsis overflow-hidden h-[38px]'>{content}</p>
+          <p className="text-ellipsis overflow-hidden h-[38px]">{content}</p>
 
           <button className={` text-sm font-medium text-dark-gray`}>
             Xem thêm
@@ -84,7 +83,7 @@ const Post = ({
             >
               {from}
             </span>
-            <img src={ArrowRightIcon} alt='arrow' />
+            <img src={ArrowRightIcon} alt="arrow" />
             <span
               className={`text-center text-base font-extrabold text-orange`}
             >
@@ -97,4 +96,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default Event;

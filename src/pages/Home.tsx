@@ -3,9 +3,8 @@ import Tabs from "@/components/common/Tabs";
 import Event from "@/components/common/Event";
 
 import { useState } from "react";
-import TodayEvent from "@/components/common/Event/TodayEvent";
-import Calendar from "@/components/common/Calendar";
 import { TABS, tabs } from "@/constants/home";
+import RightMenu from "@/components/common/Layout/RightMenu";
 
 const Home = () => {
   const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);
@@ -54,10 +53,7 @@ const Home = () => {
       </div>
 
       {/*  */}
-      <div className="hidden lg:!flex w-[350px] pt-6 pb-[200px] flex-col gap-6 sticky top-0 h-[100svh] overflow-auto">
-        <TodayEvent />
-        <Calendar />
-      </div>
+      <RightMenu />
     </div>
   );
 };

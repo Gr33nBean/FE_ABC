@@ -152,3 +152,48 @@ export function getWordingAction(value: Action) {
       return "";
   }
 }
+
+export function getVNLabel(type: Type, value: string): string {
+  console.log(type, value);
+
+  switch (type) {
+    case "post":
+      return (
+        PostType.items.find(
+          (item) => item.label?.toLowerCase() === value.toLowerCase()
+        )?.label_vn ?? ""
+      );
+    case "resource":
+      return (
+        ResourceType.items.find(
+          (item) => item.label?.toLowerCase() === value.toLowerCase()
+        )?.label_vn ?? ""
+      );
+    case "event":
+      return (
+        EventType.items.find(
+          (item) => item.label?.toLowerCase() === value.toLowerCase()
+        )?.label_vn ?? ""
+      );
+    case "request":
+      return (
+        RequestType.items.find(
+          (item) => item.label?.toLowerCase() === value.toLowerCase()
+        )?.label_vn ?? ""
+      );
+    case "document":
+      return (
+        DocumentType.items.find(
+          (item) => item.label?.toLowerCase() === value.toLowerCase()
+        )?.label_vn ?? ""
+      );
+    case "department":
+      return (
+        Department.items.find(
+          (item) => item.label?.toLowerCase() === value.toLowerCase()
+        )?.label_vn ?? ""
+      );
+    default:
+      return "";
+  }
+}

@@ -1,7 +1,8 @@
 import { ApprovalStatus } from "@/services/type";
 import PostBase, { PostBaseType } from "../PostBase";
 import { getFormatDateString } from "@/utils";
-import { getWording } from "@/constants/type";
+import { getColorFromType, getWording } from "@/constants/type";
+import ApproveButton from "../PostBase/ApproveButton";
 
 export type RequestProps = PostBaseType & {
   description: string; // text
@@ -11,6 +12,7 @@ export type RequestProps = PostBaseType & {
   decisionDetail?: string;
   approvalStatus: ApprovalStatus;
   reporter?: string;
+  isNeedApproval?: boolean;
 };
 
 const Request = ({
@@ -25,6 +27,7 @@ const Request = ({
   decisionDetail,
   approvalStatus,
   reporter,
+  isNeedApproval,
 }: RequestProps) => {
   return (
     <PostBase
@@ -49,6 +52,10 @@ const Request = ({
             Người báo cáo:
             <span className="font-bold text-blue"> @{reporter}</span>
           </p>
+        )}
+
+        {isNeedApproval && (
+          <ApproveButton color={getColorFromType("request")} />
         )}
       </div>
     </PostBase>

@@ -77,7 +77,7 @@ const Menu = () => {
           to={item.to}
           className={cn(
             "rounded-full w-fit hover:bg-extra-extra-light-gray pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6",
-            item.canBeHiden && "[@media(min-height:1000px)]:!block hidden "
+            item.canBeHiden && "[@media(min-height:500px)]:!block hidden "
           )}
           children={({ isActive }) => (
             <div className={`flex items-center transition-all duration-150`}>
@@ -97,7 +97,7 @@ const Menu = () => {
         />
       ))}
 
-      <div className="[@media(min-height:1000px)]:hidden ">
+      <div className="[@media(min-height:500px)]:hidden ">
         <MoreButton />
       </div>
     </nav>

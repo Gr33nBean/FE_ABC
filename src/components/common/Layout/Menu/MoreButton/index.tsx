@@ -124,7 +124,7 @@ const MoreButton = () => {
                   <p
                     className={cn(
                       "pl-6 text-[24px] transition-all duration-150 hidden lg:!block",
-                      isActive ? "font-extrabold" : "font-normal"
+                      isActive ? "font-bold" : "font-normal"
                     )}
                   >
                     {item.name}

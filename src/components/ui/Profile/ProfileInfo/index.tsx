@@ -2,7 +2,9 @@ import cupcake from "@assets/images/Common/Cupcake.svg";
 import calendar from "@assets/images/Common/Calendar_Days.svg";
 import ProfileTabs from "../ProfileTabs";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({ uid }: { uid?: string }) => {
+  console.log(uid);
+
   return (
     <div className="w-full">
       {/*  */}

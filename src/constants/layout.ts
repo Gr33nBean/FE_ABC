@@ -7,6 +7,8 @@ export const routes = {
   resource: "/resource",
   document: "/document",
   profile: "/profile",
+  post: "/post",
+  event: "/event",
 };
 
 export const IconList: { [key: (typeof routes)[keyof typeof routes]]: string } =

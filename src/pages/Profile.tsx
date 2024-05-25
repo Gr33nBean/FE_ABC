@@ -1,19 +1,15 @@
 import BackBar from "@/components/common/Layout/BackBar";
-import RightMenu from "@/components/common/Layout/RightMenu";
 import ProfileInfo from "@/components/ui/Profile/ProfileInfo";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
+  const { uid } = useParams();
+
   return (
-    <div className="w-full flex items-start gap-6 relative">
-      {/*  */}
-      <div className="border-r flex-1 border-extra-light-gray">
-        <BackBar />
+    <div className="w-full">
+      <BackBar />
 
-        <ProfileInfo />
-      </div>
-
-      {/*  */}
-      <RightMenu />
+      <ProfileInfo uid={uid} />
     </div>
   );
 };

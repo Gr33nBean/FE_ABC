@@ -3,6 +3,7 @@ import PostBase, { PostBaseType } from "../PostBase";
 import { getFormatDateString } from "@/utils";
 import { getColorFromType, getWording } from "@/constants/type";
 import Tag from "../Tag";
+import ApproveButton from "../PostBase/ApproveButton";
 
 export type ResourceUsingProps = PostBaseType & {
   resource: {
@@ -17,6 +18,7 @@ export type ResourceUsingProps = PostBaseType & {
   decisionDetail?: string;
   approvalStatus: ApprovalStatus;
   reporter?: string;
+  isNeedApproval?: boolean;
 };
 
 const ResourceUsing = ({
@@ -31,6 +33,7 @@ const ResourceUsing = ({
   decisionDetail,
   approvalStatus,
   reporter,
+  isNeedApproval,
 }: ResourceUsingProps) => {
   const color = getColorFromType("resource");
   return (
@@ -94,6 +97,8 @@ const ResourceUsing = ({
             </svg>
           </button>
         </div>
+
+        {isNeedApproval && <ApproveButton color={color} />}
       </div>
     </PostBase>
   );

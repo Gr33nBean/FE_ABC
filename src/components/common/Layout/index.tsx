@@ -4,6 +4,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectIsLogin } from "@/redux/features/accountSlice";
 import toast from "react-hot-toast";
 import AvatarButton from "./AvatarButton";
+import RightMenu from "./RightMenu";
 
 export async function LayoutLoader() {
   const contacts = { huy: "huy" };
@@ -46,8 +47,13 @@ const Layout = () => {
         </div>
       </div>
       {/*  */}
-      <div className="w-full lg:w-[1050px]">
-        <Outlet />
+      <div className="w-full lg:w-[1050px] flex items-start gap-6 relative">
+        <div className="min-h-[100vh] border-r flex-1 border-extra-light-gray">
+          <Outlet />
+        </div>
+
+        {/*  */}
+        <RightMenu />
       </div>
     </div>
   );

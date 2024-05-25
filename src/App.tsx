@@ -10,6 +10,8 @@ import Resource from "./pages/Resource";
 import Profile from "./pages/Profile";
 import Notification from "./pages/Notification";
 import ViewImage from "./components/common/Dialog/ViewImage";
+import PostDetail from "./pages/PostDetail";
+import EventDetail from "./pages/EventDetail";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -48,6 +50,20 @@ const router = createBrowserRouter([
       {
         path: routes.profile,
         element: <Profile />,
+        children: [
+          {
+            path: routes.profile + "/:uid",
+            element: <Profile />,
+          },
+        ],
+      },
+      {
+        path: routes.post + "/:id",
+        element: <PostDetail />,
+      },
+      {
+        path: routes.event + "/:id",
+        element: <EventDetail />,
       },
     ],
   },

@@ -103,12 +103,12 @@ const MoreButton = () => {
             name: "Tài nguyên",
             to: routes.resource,
           },
-          {
-            icon: <MenuIcon type="document" />,
-            activeIcon: <MenuIcon isActive={true} type="document" />,
-            name: "Tài liệu",
-            to: routes.document,
-          },
+          // {
+          //   icon: <MenuIcon type="document" />,
+          //   activeIcon: <MenuIcon isActive={true} type="document" />,
+          //   name: "Tài liệu",
+          //   to: routes.document,
+          // },
         ].map((item, index) => (
           <div key={index}>
             <NavLink

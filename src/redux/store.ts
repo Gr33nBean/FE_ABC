@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import accountReducer from "./features/accountSlice";
+import dialogSlice from "./features/dialogSlice";
 
 export const store = configureStore({
   reducer: {
     account: accountReducer,
+    dialog: dialogSlice,
   },
 });
 

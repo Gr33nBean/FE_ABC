@@ -1,15 +1,8 @@
-import ThreeDotsIcon from "@/assets/images/Home/three-dots.svg";
 import ArrowRightIcon from "@/assets/images/Home/arrow-right.svg";
-import Tag from "../Tag";
-import { getColorFromType } from "@/constants/type";
-import Avatar from "../Avatar";
+import PostBase, { PostBaseType } from "../PostBase";
+import LongContent from "../PostBase/LongContent";
 
-type EventProps = {
-  name: string;
-  time: string;
-  tag: string;
-  title: string;
-  noOfPeople: number;
+export type EventProps = PostBaseType & {
   content: string;
   room: string;
   from: string;
@@ -17,82 +10,46 @@ type EventProps = {
 };
 
 const Event = ({
-  name,
-  time,
+  userName,
+  createdAt,
   tag,
-  title,
-  noOfPeople,
+  name,
+  joinAmount,
   content,
   room,
   from,
   to,
 }: EventProps) => {
   return (
-    <div
-      className={`w-full flex flex-row px-5 py-3 gap-2 border-b-[0.5px] border-extra-light-gray`}
+    <PostBase
+      userName={userName}
+      createdAt={createdAt}
+      tag={tag}
+      name={name}
+      joinAmount={joinAmount}
+      typeTag="event"
     >
-      <Avatar />
-
-      <div className={`gap-3 w-full`}>
-        <div className={`w-full flex flex-row justify-between items-center`}>
-          <p className={` text-lg font-bold`}>{name}</p>
-          <div className={`flex flex-row items-center gap-3`}>
-            <p className={`text-base font-normal text-dark-gray`}>{time}</p>
-            <button>
-              <img src={ThreeDotsIcon} alt="three-dots" />
-            </button>
-          </div>
-        </div>
-
-        <div className={`gap-1`}>
-          <div className={`flex flex-row  items-center justify-between`}>
-            <div className={`flex flex-row gap-3`}>
-              <Tag text={tag} color={getColorFromType(tag)} />
-              <p className={`text-lg font-semibold text-black`}>{title}</p>
-            </div>
-            <p className={` text-sm font-normal text-dark-gray`}>
-              {noOfPeople} người tham gia
-            </p>
-          </div>
-
-          <p className="text-ellipsis overflow-hidden h-[38px]">{content}</p>
-
-          <button className={` text-sm font-medium text-dark-gray`}>
-            Xem thêm
-          </button>
-        </div>
-
+      <div className="w-full flex flex-col gap-1">
+        <LongContent content={content} />
         <div
-          className={`flex flex-row bg-orange bg-opacity-10 h-[60px] w-full rounded-sm`}
+          className={`flex items-stretch bg-orange bg-opacity-10 w-full rounded-sm text-orange`}
         >
-          <div
-            className={`w-[159px] h-full border-r-2 border-white flex justify-content: center items-center `}
+          <p
+            className={`w-[30%] border-r-2 border-extra-extra-light-gray flex items-center justify-center text-center text-base font-extrabold py-3`}
           >
-            <span
-              className={`text-center w-full text-base font-extrabold text-orange`}
-            >
-              Room {room}
-            </span>
-          </div>
+            Room {room}
+          </p>
 
           <div
-            className={`flex flex-row flex-1 h-full  justify-center items-center gap-2 `}
+            className={`flex flex-1 justify-center items-center gap-2 text-center text-sm font-bold `}
           >
-            <span
-              className={`text-center text-base font-extrabold text-orange`}
-            >
-              {from}
-            </span>
+            <span>{from}</span>
             <img src={ArrowRightIcon} alt="arrow" />
-            <span
-              className={`text-center text-base font-extrabold text-orange`}
-            >
-              {to}
-            </span>
+            <span>{to}</span>
           </div>
         </div>
       </div>
-    </div>
+    </PostBase>
   );
 };
 

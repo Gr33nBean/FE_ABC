@@ -10,28 +10,29 @@ const CreatePost = () => {
       className={`w-full py-1 px-5 border-b-[0.5px] border-extra-light-gray`}
     >
       <div
-        className={`w-full flex flex-row  gap-1 h-[144px] border-b-[0.5px] border-extra-light-gray`}
+        className={`w-full flex items-center gap-2 pb-14 pt-2 border-b-[0.5px] border-extra-light-gray`}
       >
         <Avatar />
-        <textarea
-          placeholder="Có gì mới?!"
-          className={`text-xl font-normal !outline-none text-left flex-1 resize-none mt-3`}
-        />
+        <p
+          className={`text-xl font-normal text-dark-gray !outline-none text-left flex-1 resize-none `}
+        >
+          Có gì mới?!
+        </p>
       </div>
 
-      <div className={`h-[67px] w-full pl-[52px] py-3 gap-3 flex flex-row`}>
+      <div className={`w-full pl-[48px] py-2 gap-2 flex`}>
         <div className={`flex flex-1`}>
           <button>
-            <img src={ImageIcon} alt="cc" />
+            <img src={ImageIcon} alt="" />
           </button>
           <button>
-            <img src={FileIcon} alt="cc" />
+            <img src={FileIcon} alt="" />
           </button>
           <button>
-            <img src={PhoneIcon} alt="cc" />
+            <img src={PhoneIcon} alt="" />
           </button>
           <button>
-            <img src={SendIcon} alt="cc" />
+            <img src={SendIcon} alt="" />
           </button>
         </div>
         <Button text="Đăng bài" onClick={() => {}} className={`w-[154px]`} />

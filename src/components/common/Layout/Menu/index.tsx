@@ -38,12 +38,12 @@ const Menu = () => {
           name: "Thông báo",
           to: routes.notification,
         },
-        {
-          icon: <MenuIcon type="message" />,
-          activeIcon: <MenuIcon isActive={true} type="message" />,
-          name: "Tin nhắn",
-          to: routes.message,
-        },
+        // {
+        //   icon: <MenuIcon type="message" />,
+        //   activeIcon: <MenuIcon isActive={true} type="message" />,
+        //   name: "Tin nhắn",
+        //   to: routes.message,
+        // },
         {
           icon: <MenuIcon type="approve" />,
           activeIcon: <MenuIcon isActive={true} type="approve" />,
@@ -58,13 +58,13 @@ const Menu = () => {
           to: routes.resource,
           canBeHiden: true,
         },
-        {
-          icon: <MenuIcon type="document" />,
-          activeIcon: <MenuIcon isActive={true} type="document" />,
-          name: "Tài liệu",
-          to: routes.document,
-          canBeHiden: true,
-        },
+        // {
+        //   icon: <MenuIcon type="document" />,
+        //   activeIcon: <MenuIcon isActive={true} type="document" />,
+        //   name: "Tài liệu",
+        //   to: routes.document,
+        //   canBeHiden: true,
+        // },
         {
           icon: <MenuIcon type="profile" />,
           activeIcon: <MenuIcon isActive={true} type="profile" />,
@@ -87,7 +87,7 @@ const Menu = () => {
               <p
                 className={cn(
                   "pl-6 text-[24px] transition-all duration-150 hidden lg:!block",
-                  isActive ? "font-extrabold" : "font-normal"
+                  isActive ? "font-bold" : "font-normal"
                 )}
               >
                 {item.name}

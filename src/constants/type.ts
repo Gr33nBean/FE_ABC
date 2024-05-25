@@ -1,10 +1,12 @@
+import { Action, ApprovalStatus, Grade, StatusType } from "@/services/type";
+
 type TypeItem = {
   color: string;
   items: { label: string; label_vn: string; value?: string }[];
 };
 
 export const PostType: TypeItem = {
-  color: "blue",
+  color: "#1DA1F2",
   items: [
     { label: "News", label_vn: "Tin tức" },
     { label: "Announce", label_vn: "Thông báo" },
@@ -17,7 +19,7 @@ export const PostType: TypeItem = {
 };
 
 export const ResourceType: TypeItem = {
-  color: "purple",
+  color: "#7659FF",
   items: [
     { label: "Room", label_vn: "Phòng" },
     { label: "Device", label_vn: "Thiết bị" },
@@ -27,7 +29,7 @@ export const ResourceType: TypeItem = {
 };
 
 export const EventType: TypeItem = {
-  color: "orange",
+  color: "#F77C00",
   items: [
     { label: "Sharing", label_vn: "Chia sẻ" },
     { label: "Playing", label_vn: "Đi chơi" },
@@ -40,7 +42,7 @@ export const EventType: TypeItem = {
 };
 
 export const RequestType: TypeItem = {
-  color: "pink",
+  color: "#EF257E",
   items: [
     { label: "Off", label_vn: "Nghỉ" },
     { label: "Pregnant", label_vn: "Thai sản" },
@@ -53,7 +55,7 @@ export const RequestType: TypeItem = {
 };
 
 export const DocumentType: TypeItem = {
-  color: "yellow",
+  color: "#FBD400",
   items: [
     { label: "Traning", label_vn: "Huấn luyện" },
     { label: "GuideLine", label_vn: "Hướng dẫn" },
@@ -63,7 +65,7 @@ export const DocumentType: TypeItem = {
 };
 
 export const Department: TypeItem = {
-  color: "green",
+  color: "#3BB97C",
   items: [
     { label: "HumanResources", label_vn: "Nhân sự" },
     { label: "Communications", label_vn: "Truyền thông" },
@@ -72,22 +74,81 @@ export const Department: TypeItem = {
   ],
 };
 
-export const AllType: TypeItem[] = [
-  PostType,
-  ResourceType,
-  EventType,
-  RequestType,
-  DocumentType,
-  Department,
-];
+export type Type =
+  | "post"
+  | "resource"
+  | "event"
+  | "request"
+  | "document"
+  | "department";
 
-export function getColorFromType(type: string) {
-  const res = AllType.find((item) =>
-    item.items.find(
-      (i) =>
-        i.label.trim().toLocaleLowerCase() === type.trim().toLocaleLowerCase()
-    )
-  )?.color;
+export function getColorFromType(type: Type): string {
+  let res: TypeItem | undefined = undefined;
+  switch (type) {
+    case "post":
+      res = PostType;
+      break;
+    case "resource":
+      res = ResourceType;
+      break;
+    case "event":
+      res = EventType;
+      break;
+    case "request":
+      res = RequestType;
+      break;
+    case "document":
+      res = DocumentType;
+      break;
+    case "department":
+      res = Department;
+      break;
+    default:
+      res = PostType;
+      break;
+  }
 
-  return res;
+  return res.color;
+}
+
+export function getWording(value: StatusType | ApprovalStatus | Grade) {
+  switch (value) {
+    case StatusType.Create:
+      return "Vừa tạo";
+    case StatusType.Active:
+      return "Hiển thị";
+    case StatusType.InActive:
+      return "Ẩn";
+    case ApprovalStatus.Pending:
+      return "Chờ xử lý";
+    case ApprovalStatus.Approve:
+      return "Duyệt";
+    case ApprovalStatus.Cancel:
+      return "Đã huỷ";
+    case Grade.Employee:
+      return "Nhân viên";
+    case Grade.Manager:
+      return "Quản lý";
+    case Grade.Director:
+      return "Giám đốc";
+    case Grade.Admin:
+      return "Admin";
+    default:
+      return "";
+  }
+}
+
+export function getWordingAction(value: Action) {
+  switch (value) {
+    case Action.Create:
+      return "Tạo";
+    case Action.Read:
+      return "Đọc";
+    case Action.Update:
+      return "Sửa";
+    case Action.Delete:
+      return "Xóa";
+    default:
+      return "";
+  }
 }

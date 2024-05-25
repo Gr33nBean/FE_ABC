@@ -5,12 +5,11 @@ import Error from "./pages/Error";
 import Home from "./pages/Home";
 import { routes } from "./constants/layout";
 import Search from "./pages/Search";
-import Message from "./pages/Message";
 import Approve from "./pages/Approve";
 import Resource from "./pages/Resource";
-import Document from "./pages/Document";
 import Profile from "./pages/Profile";
 import Notification from "./pages/Notification";
+import ViewImage from "./components/common/Dialog/ViewImage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,10 +29,10 @@ const router = createBrowserRouter([
         path: routes.notification,
         element: <Notification />,
       },
-      {
-        path: routes.message,
-        element: <Message />,
-      },
+      // {
+      //   path: routes.message,
+      //   element: <Message />,
+      // },
       {
         path: routes.approve,
         element: <Approve />,
@@ -42,10 +41,10 @@ const router = createBrowserRouter([
         path: routes.resource,
         element: <Resource />,
       },
-      {
-        path: routes.document,
-        element: <Document />,
-      },
+      // {
+      //   path: routes.document,
+      //   element: <Document />,
+      // },
       {
         path: routes.profile,
         element: <Profile />,
@@ -58,6 +57,7 @@ function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <RouterProvider router={router} />
+      <ViewImage />
     </Suspense>
   );
 }

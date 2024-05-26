@@ -12,7 +12,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <App />
       <Toaster
         toastOptions={{
-          className: "text-base text-blue font-semibold",
+          className: " w-fit max-w-[70%]",
+          // duration: 5000000000000000,
         }}
       />
     </Provider>

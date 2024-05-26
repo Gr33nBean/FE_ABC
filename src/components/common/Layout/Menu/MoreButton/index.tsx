@@ -7,7 +7,7 @@ import { cn } from "@/utils";
 const MoreButton = () => {
   return (
     <Popover>
-      <PopoverButton className="rounded-full w-fit hover:bg-extra-extra-light-gray  pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6 flex items-center ">
+      <PopoverButton className="outline-none rounded-full w-fit hover:bg-extra-extra-light-gray  pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6 flex items-center ">
         <span className="size-fit transition-all duration-150">
           <svg
             width="28"

@@ -12,6 +12,7 @@ import Notification from "./pages/Notification";
 import ViewImage from "./components/common/Dialog/ViewImage";
 import PostDetail from "./pages/PostDetail";
 import EventDetail from "./pages/EventDetail";
+import Login from "./pages/Login";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
         element: <EventDetail />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 

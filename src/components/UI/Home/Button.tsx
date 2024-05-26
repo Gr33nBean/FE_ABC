@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 const Button = ({ text, onClick, className, ...props }: ButtonProps) => {

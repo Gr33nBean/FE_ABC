@@ -1,25 +1,26 @@
+import { User } from "@/services/type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AccountState {
-  uid: string;
+  signedUser?: User;
 }
 
 const initialState: AccountState = {
-  uid: "",
+  signedUser: undefined,
 };
 
 const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {
-    setUid(state, action: PayloadAction<string>) {
-      state.uid = action.payload;
+    setSignedUser(state, action: PayloadAction<User | undefined>) {
+      state.signedUser = action.payload;
     },
   },
 });
 
-export const selectUid = (state: { account: AccountState }) =>
-  state.account.uid;
+export const selectSignedUser = (state: { account: AccountState }) =>
+  state.account.signedUser;
 
-export const { setUid } = accountSlice.actions;
+export const { setSignedUser } = accountSlice.actions;
 export default accountSlice.reducer;

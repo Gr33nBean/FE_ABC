@@ -1,3 +1,5 @@
+export const domain = import.meta.env.VITE_BE;
+
 export enum StatusType {
   Create = "create",
   Active = "active",
@@ -36,8 +38,8 @@ export interface Permission {
   id: number;
   minGrade: Grade; // minimum grade to get this permission
   action: Action;
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   isProtected: boolean;
   status: StatusType;
   // isProtected == true -> cannot be changed via UI by all Grade, except admin
@@ -48,34 +50,34 @@ export interface User {
   departmentId: number; // reference to Department.id
   grade: Grade;
   username: string;
-  birthday: string; // date
+  birthday: number; // date
   email: string;
   avatar: string;
   description: string; // text
   permissionIdToCRUD: Grade[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: number; // timestamp
+  updateAt: number; // timestamp
   status: StatusType;
 }
 
 export interface Department {
-  id: number;
+  id: string;
   directorUid: string; // reference to User.uid
   name: string;
   permissionIdToCRUD: Grade[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
 export interface PostType {
-  id: number;
+  id: string;
   name: string;
   description: string; // text
   permissionIdToCRUDPost: Grade[];
   permissionIdToCRUD: Grade[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -91,8 +93,8 @@ export interface Post {
   files: FileType[];
   likes: number;
   comments: number;
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
   // if eventId is valid
   // -> event.permissionIdToCRUDPost > postType.permissionIdToCRUDPost
@@ -102,8 +104,8 @@ export interface PostLike {
   id: number;
   userId: string; // reference to User.uid
   postId: number; // reference to Post.id
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -114,8 +116,8 @@ export interface PostComment {
   content?: string; // text | null
   images: FileType[];
   files: FileType[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -127,14 +129,14 @@ export interface FileType {
 }
 
 export interface ResourceType {
-  id: number;
+  id: string;
   name: string;
   description: string; // text
   permissionIdToCRUDResourceUsing: Grade[];
   permissionIdToCRUDResource: Grade[];
   permissionIdToCRUD: Grade[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -145,8 +147,8 @@ export interface Resource {
   name: string;
   description: string; // text
   isFree: boolean; // sync with ResourceUsing
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -160,19 +162,19 @@ export interface ResourceUsing {
   approvalStatus: ApprovalStatus;
   decidedAt: string; // timestamp
   decisionDetail?: string; // text | null
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
 export interface EventType {
-  id: number;
+  id: string;
   name: string;
   description: string; // text
   permissionIdToCRUDEvent: Grade[];
   permissionIdToCRUD: Grade[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -188,8 +190,8 @@ export interface Event {
   description: string; // text
   startAt: string; // timestamp
   endAt: string; // timestamp
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -199,8 +201,8 @@ export interface Event {
 //   description: string; // text
 //   permissionIdToCRUDDocument: Grade[];
 //   permissionIdToCRUD: Grade[];
-//   createdAt: string; // timestamp
-//   updatedAt: string; // timestamp
+//   createAt: string; // timestamp
+//   updateAt: string; // timestamp
 //   status: StatusType;
 // }
 
@@ -210,20 +212,20 @@ export interface Event {
 //   creatorUid: string; // reference to User.uid
 //   name: string;
 //   file: FileType;
-//   createdAt: string; // timestamp
-//   updatedAt: string; // timestamp
+//   createAt: string; // timestamp
+//   updateAt: string; // timestamp
 //   status: StatusType;
 // }
 
 export interface RequestType {
-  id: number;
+  id: string;
   name: string;
   description: string; // text
   approvalDepartmentId: number; // reference to Department.id
   minApprovalGrade: Grade;
   permissionIdToCRUD: Grade[];
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }
 
@@ -239,7 +241,7 @@ export interface Request {
   approvalStatus: ApprovalStatus;
   decidedAt: string; // timestamp
   decisionDetail?: string; // text | null
-  createdAt: string; // timestamp
-  updatedAt: string; // timestamp
+  createAt: string; // timestamp
+  updateAt: string; // timestamp
   status: StatusType;
 }

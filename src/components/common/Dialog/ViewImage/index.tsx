@@ -4,6 +4,7 @@ import {
 } from "@/redux/features/dialogSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import Background from "../Background";
 
 const ViewImage = () => {
   const { index, images } = useAppSelector(selectIsOpenViewImage);
@@ -24,12 +25,7 @@ const ViewImage = () => {
   };
   return (
     <Dialog open={index != -1} onClose={handleClose} className="relative z-50">
-      <div
-        className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black bg-opacity-70 transition-all duration-300"
-        style={{
-          backdropFilter: "blur(2px)",
-        }}
-      >
+      <Background>
         <DialogPanel className="max-w-lg relative h-[95vh] flex items-center">
           <img
             src={images[index]}
@@ -49,9 +45,9 @@ const ViewImage = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="m15 18-6-6 6-6" />
               </svg>
@@ -70,16 +66,16 @@ const ViewImage = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="m9 18 6-6-6-6" />
               </svg>
             </button>
           </div>
         </DialogPanel>
-      </div>
+      </Background>
     </Dialog>
   );
 };

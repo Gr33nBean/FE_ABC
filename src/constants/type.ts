@@ -111,7 +111,10 @@ export function getColorFromType(type: Type): string {
   return res.color;
 }
 
-export function getWording(value: StatusType | ApprovalStatus | Grade) {
+export function getWording(value: StatusType | ApprovalStatus | Grade | "") {
+  if (!value) {
+    return "";
+  }
   switch (value) {
     case StatusType.Create:
       return "Vừa tạo";

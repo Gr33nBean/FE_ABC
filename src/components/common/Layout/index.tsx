@@ -1,35 +1,35 @@
 import { Outlet, useNavigate, useNavigation } from "react-router-dom";
 import Menu from "./Menu";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { selectUid, setUid } from "@/redux/features/accountSlice";
+import { selectSignedUser, setSignedUser } from "@/redux/features/accountSlice";
 import toast from "react-hot-toast";
 import AvatarButton from "./AvatarButton";
 import RightMenu from "./RightMenu";
 import Loading from "./Loading";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
+import { userService } from "@/services/user.service";
 export async function LayoutLoader() {
   const contacts = { huy: "huy" };
-
   return { contacts };
 }
 
 const Layout = () => {
   const { state } = useNavigation();
-  const uid = useAppSelector(selectUid);
+  const signedUser = useAppSelector(selectSignedUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  onAuthStateChanged(auth, (user) => {
-    let _uid = "";
+
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      _uid = user.uid;
+      if (signedUser === undefined) {
+        const data = await userService.getUser([user.uid]);
+        dispatch(setSignedUser(data[0]));
+        console.log(data[0]);
+      }
     } else {
       navigate("/login");
     }
-    if (uid !== _uid) {
-      dispatch(setUid(_uid));
-    }
-    console.log(_uid);
   });
 
   //
@@ -37,7 +37,7 @@ const Layout = () => {
   // console.log(a);
   return (
     <div className="w-full flex items-start justify-center relative">
-      {uid ? (
+      {signedUser ? (
         <>
           {/*  */}
           <div className="sticky top-0 w-fit">
@@ -68,7 +68,7 @@ const Layout = () => {
           </div>
           {/*  */}
           <div className="w-full lg:w-[1050px] flex items-start gap-6 relative">
-            <div className="min-h-[100vh] border-r flex-1 border-extra-light-gray">
+            <div className="min-h-[100vh] border-r w-full flex-1 border-extra-light-gray">
               {state === "loading" ? <Loading /> : <Outlet />}
             </div>
 

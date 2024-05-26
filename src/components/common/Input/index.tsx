@@ -1,15 +1,23 @@
-import React from "react";
+import { forwardRef } from "react";
 
-const Input = ({
-  startIcon,
-  endIcon,
-  ...props
-}: {
-  startIcon?: JSX.Element;
-  endIcon?: JSX.Element;
-} & React.InputHTMLAttributes<HTMLInputElement>) => {
+const Input = forwardRef(function Input(
+  {
+    startIcon,
+    endIcon,
+    label,
+    ...props
+  }: {
+    startIcon?: JSX.Element;
+    endIcon?: JSX.Element;
+    label?: string;
+  } & React.InputHTMLAttributes<HTMLInputElement>,
+  ref?: React.Ref<HTMLInputElement>
+) {
   return (
     <div className="w-full">
+      {label && (
+        <p className="text-sm font-normal text-dark-gray w-full ">{label}</p>
+      )}
       <label
         className="flex items-stretch w-full relative overflow-hidden rounded-lg  border border-light-gray"
         style={{
@@ -23,6 +31,7 @@ const Input = ({
         )}
         <input
           type="text"
+          ref={ref}
           className="outline-none flex-1 z-10  px-4 py-2 text-base bg-transparent font-medium text-black "
           {...props}
         />
@@ -34,6 +43,6 @@ const Input = ({
       </label>
     </div>
   );
-};
+});
 
 export default Input;

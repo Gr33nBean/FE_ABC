@@ -1,17 +1,34 @@
 import { auth } from "@/firebase";
+import { selectSignedUser } from "@/redux/features/accountSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { cn } from "@/utils";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { signOut } from "firebase/auth";
 
 const AvatarButton = () => {
+  const signedUser = useAppSelector(selectSignedUser);
+
   return (
     <Popover>
       <PopoverButton className="outline-none flex items-center justify-center hover:bg-extra-extra-light-gray w-full rounded-full p-3 gap-3">
-        <p className="size-[48px] aspect-square rounded-full bg-blue"></p>
+        <div className="size-[48px] aspect-square rounded-full overflow-hidden relative">
+          <div className=" size-full bg-blue bg-opacity-70 animate-pulse"></div>
+          <div className="absolute inset-0 z-10 size-full">
+            <img
+              src={signedUser?.avatar}
+              alt="avatar"
+              className="size-full object-cover "
+            />
+          </div>
+        </div>
 
-        <p className="text-lg text-start leading-5 text-black hidden lg:!block">
-          <span className="font-bold block">Huy</span>
-          <span className="font-normal block">@huyx3_14</span>
+        <p className="text-lg flex-1 w-[calc(100%-48px-24px-28px)] text-start leading-5 text-black hidden lg:!block">
+          <span className="font-bold block text-ellipsis truncate">
+            {signedUser?.username}
+          </span>
+          <span className="font-normal block truncate">
+            @{signedUser?.email}
+          </span>
         </p>
 
         <span className="hidden lg:!block">
@@ -61,9 +78,9 @@ const AvatarButton = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="black"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />

@@ -9,8 +9,8 @@ const tabs = [
   { label: "Sự kiện", value: TABS.EVENT },
   { label: "Tin tức", value: TABS.NEWS },
   { label: "Chia sẻ", value: TABS.SHARING },
-  { label: "Thông báo", value: TABS.NOTIFICATION },
-  { label: "Tuyển dụng", value: TABS.RECRUITMENT },
+  { label: "Thông báo", value: TABS.ANNOUNCE },
+  { label: "Tuyển dụng", value: TABS.RECRUIT },
 ];
 const Search = () => {
   const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);
@@ -31,9 +31,9 @@ const Search = () => {
               viewBox="0 0 24 24"
               fill="none"
               stroke="#657786"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />

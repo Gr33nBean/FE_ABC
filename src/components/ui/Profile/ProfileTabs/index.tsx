@@ -1,3 +1,7 @@
+import Request, { RequestProps } from "@/components/common/Request";
+import ResourceUsing, {
+  ResourceUsingProps,
+} from "@/components/common/ResourceUsing";
 import Tabs from "@/components/common/Tabs";
 import { TABS } from "@/constants";
 import { useState } from "react";
@@ -34,6 +38,53 @@ const ProfileTabs = () => {
           setSelectedTab(value);
         }}
       />
+
+      {[
+        ...Array.from({ length: 3 }).fill({
+          userName: "phtrhuy",
+          createdAt: "12 giờ",
+          tag: "Device",
+          name: "Mượn thiết bị",
+          resource: {
+            name: "Macbook Pro M1 2021",
+            description: "",
+            images: [
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN-GGuUBa9frqFf_fN74hERS96U60Kc3tRmCSJevvFQg&s",
+            ],
+            resourceType: "Device",
+          },
+          startAt: new Date(),
+          endAt: new Date(),
+          decidedAt: new Date(),
+          decisionDetail: "Thực hiện đồ án ở Trường Đại học",
+          approvalStatus: "approve",
+          reporter: "phtrhuy",
+        }),
+      ].map((item, index) => (
+        <div key={index}>
+          <ResourceUsing {...(item as ResourceUsingProps)} />
+        </div>
+      ))}
+
+      {[
+        ...Array.from({ length: 3 }).fill({
+          userName: "phtrhuy",
+          createdAt: "12 giờ",
+          tag: "Off",
+          name: "Xin nghỉ",
+          description: "Thực hiện đồ án ở Trường Đại học",
+          startAt: new Date(),
+          endAt: new Date(),
+          decidedAt: new Date(),
+          decisionDetail: "Thực hiện đồ án ở Trường Đại học",
+          approvalStatus: "approve",
+          reporter: "phtrhuy",
+        }),
+      ].map((item, index) => (
+        <div key={index}>
+          <Request {...(item as RequestProps)} />
+        </div>
+      ))}
     </div>
   );
 };

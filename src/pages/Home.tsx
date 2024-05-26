@@ -3,23 +3,35 @@ import Event, { EventProps } from "@/components/common/Event";
 import Tabs from "@/components/common/Tabs";
 
 import Post, { PostProps } from "@/components/common/Post";
-import Request, { RequestProps } from "@/components/common/Request";
-import ResourceUsing, {
-  ResourceUsingProps,
-} from "@/components/common/ResourceUsing";
-import { TABS } from "@/constants";
-import { useState } from "react";
 
-const tabs = [
-  { label: "Tất cả", value: TABS.ALL },
-  { label: "Sự kiện", value: TABS.EVENT },
-  { label: "Tin tức", value: TABS.NEWS },
-  { label: "Chia sẻ", value: TABS.SHARING },
-  { label: "Thông báo", value: TABS.NOTIFICATION },
-  { label: "Tuyển dụng", value: TABS.RECRUITMENT },
-];
+import { TABS } from "@/constants";
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { PostType } from "@/services/type";
+import { postTypeService } from "@/services/postType.service";
 
 const Home = () => {
+  const { data } = useQuery<PostType[]>({
+    queryKey: ["home_tabs"],
+    queryFn: async () => {
+      const res = await postTypeService.getAll();
+      return res;
+    },
+  });
+
+  const tabs = useMemo(() => {
+    return [
+      { label: "Tất cả", value: TABS.ALL },
+      ...(data
+        ?.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }))
+        .filter((item) => item.value !== TABS.OTHER) ?? []),
+      { label: "Khác", value: TABS.OTHER },
+    ];
+  }, [data]);
+
   const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);
 
   const onChangeTab = (value: string) => {
@@ -27,8 +39,8 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full">
-      <div className="h-[64px] flex items-end sticky top-0 z-10 bg-white">
+    <div className="w-full max-w-full">
+      <div className="h-[64px] w-full max-w-full flex items-end sticky top-0 z-10 bg-white">
         <Tabs
           selectedTab={selectedTab}
           onChangeTab={onChangeTab}
@@ -86,53 +98,6 @@ const Home = () => {
       ].map((item, index) => (
         <div key={index}>
           <Post {...(item as PostProps)} />
-        </div>
-      ))}
-
-      {[
-        ...Array.from({ length: 3 }).fill({
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Device",
-          name: "Mượn thiết bị",
-          resource: {
-            name: "Macbook Pro M1 2021",
-            description: "",
-            images: [
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN-GGuUBa9frqFf_fN74hERS96U60Kc3tRmCSJevvFQg&s",
-            ],
-            resourceType: "Device",
-          },
-          startAt: new Date(),
-          endAt: new Date(),
-          decidedAt: new Date(),
-          decisionDetail: "Thực hiện đồ án ở Trường Đại học",
-          approvalStatus: "approve",
-          reporter: "phtrhuy",
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <ResourceUsing {...(item as ResourceUsingProps)} />
-        </div>
-      ))}
-
-      {[
-        ...Array.from({ length: 3 }).fill({
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Off",
-          name: "Xin nghỉ",
-          description: "Thực hiện đồ án ở Trường Đại học",
-          startAt: new Date(),
-          endAt: new Date(),
-          decidedAt: new Date(),
-          decisionDetail: "Thực hiện đồ án ở Trường Đại học",
-          approvalStatus: "approve",
-          reporter: "phtrhuy",
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Request {...(item as RequestProps)} />
         </div>
       ))}
     </div>

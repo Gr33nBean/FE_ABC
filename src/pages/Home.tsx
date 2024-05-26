@@ -28,7 +28,7 @@ const Home = () => {
 
   return (
     <div className="w-full">
-      <div className="h-[64px] flex items-end sticky top-0 bg-white">
+      <div className="h-[64px] flex items-end sticky top-0 z-10 bg-white">
         <Tabs
           selectedTab={selectedTab}
           onChangeTab={onChangeTab}
@@ -46,6 +46,48 @@ const Home = () => {
           </p>
         </button>
       </div>
+
+      {[
+        ...Array.from({ length: 3 }).fill({
+          id: "123",
+          userName: "phtrhuy",
+          createdAt: "12 giờ",
+          tag: "Welcome",
+          name: "Chào đón thực tập sinh",
+          content:
+            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
+          joinAmount: 200,
+          room: "A1.03",
+          from: "08:00 10/05/2024",
+          to: "09:00 10/05/2024",
+        }),
+      ].map((item, index) => (
+        <div key={index}>
+          <Event {...(item as EventProps)} />
+        </div>
+      ))}
+
+      {[
+        ...Array.from({ length: 3 }).fill({
+          id: "123",
+          userName: "phtrhuy",
+          createdAt: "12 giờ",
+          tag: "Sharing",
+          name: "Chào đón thực tập sinh",
+          content:
+            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
+          imageUrls: [
+            "https://photo-zmp3.zadn.vn/avatars/5/5/b/7/55b787b8189794c412c305027d1f239d.jpg",
+            "https://images2.thanhnien.vn/528068263637045248/2023/11/5/dieu-kien-3-16991575841451246800633.jpeg",
+          ],
+          tags: ["vhng", "trhph", "trtrith", "trtrith", "trtrith", "trtrith"],
+          attachedFiles: ["test1.png", "test1.png", "test1.png"],
+        }),
+      ].map((item, index) => (
+        <div key={index}>
+          <Post {...(item as PostProps)} />
+        </div>
+      ))}
 
       {[
         ...Array.from({ length: 3 }).fill({
@@ -91,46 +133,6 @@ const Home = () => {
       ].map((item, index) => (
         <div key={index}>
           <Request {...(item as RequestProps)} />
-        </div>
-      ))}
-
-      {[
-        ...Array.from({ length: 3 }).fill({
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Sharing",
-          name: "Chào đón thực tập sinh",
-          content:
-            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-          imageUrls: [
-            "https://photo-zmp3.zadn.vn/avatars/5/5/b/7/55b787b8189794c412c305027d1f239d.jpg",
-            "https://images2.thanhnien.vn/528068263637045248/2023/11/5/dieu-kien-3-16991575841451246800633.jpeg",
-          ],
-          tags: ["vhng", "trhph", "trtrith", "trtrith", "trtrith", "trtrith"],
-          attachedFiles: ["test1.png", "test1.png", "test1.png"],
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Post {...(item as PostProps)} />
-        </div>
-      ))}
-
-      {[
-        ...Array.from({ length: 3 }).fill({
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Welcome",
-          name: "Chào đón thực tập sinh",
-          content:
-            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-          joinAmount: 200,
-          room: "A1.03",
-          from: "08:00 10/05/2024",
-          to: "09:00 10/05/2024",
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Event {...(item as EventProps)} />
         </div>
       ))}
     </div>

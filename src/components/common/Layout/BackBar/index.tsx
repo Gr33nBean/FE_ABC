@@ -1,10 +1,16 @@
 import { cn } from "@/utils";
 
-const BackBar = ({ className }: { className?: string }) => {
+const BackBar = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) => {
   return (
     <div
       className={cn(
-        "w-full h-[64px] flex items-center px-5 gap-2 sticky top-0",
+        "w-full h-[64px] flex items-center px-5 gap-2 bg-white sticky top-0 z-10",
         className
       )}
     >
@@ -28,8 +34,7 @@ const BackBar = ({ className }: { className?: string }) => {
           />
         </svg>
       </button>
-
-      <p className="text-[20px] font-semibold text-black">phtrhuy</p>
+      {children}
     </div>
   );
 };

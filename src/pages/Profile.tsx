@@ -7,7 +7,9 @@ const Profile = () => {
 
   return (
     <div className="w-full">
-      <BackBar />
+      <BackBar>
+        <p className="text-[20px] font-semibold text-black">phtrhuy</p>
+      </BackBar>
 
       <ProfileInfo uid={uid} />
     </div>

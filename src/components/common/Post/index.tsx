@@ -11,15 +11,21 @@ import SaveIcon from "@/assets/images/Common/Bookmark.svg";
 import ShareIcon from "@/assets/images/Common/Share_iOS_Export.svg";
 import LongContent from "../PostBase/LongContent/index.tsx";
 import PostBase, { PostBaseType } from "../PostBase/index.tsx";
+import { useNavigate } from "react-router-dom";
+import { routes } from "@/constants/layout.ts";
 
 export type PostProps = PostBaseType & {
+  id: string;
   content: string;
   imageUrls: string[];
   tags: string[];
   attachedFiles?: string[];
+  isDetail?: boolean;
+  eventId?: string;
 };
 
 const Post = ({
+  id,
   userName,
   createdAt,
   tag,
@@ -28,18 +34,30 @@ const Post = ({
   imageUrls,
   tags,
   attachedFiles,
+  isDetail,
+  eventId,
 }: PostProps) => {
+  console.log(eventId);
+
   const [isDetailAttachedFiles, setIsDetailAttachedFiles] =
     useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const navigate = useNavigate();
   return (
-    <>
+    <div>
       <PostBase
         userName={userName}
         createdAt={createdAt}
         tag={tag}
         name={name}
         typeTag={"post"}
+        onClick={
+          isDetail
+            ? undefined
+            : () => {
+                navigate(routes.post + "/" + id);
+              }
+        }
       >
         <div className="w-full flex flex-col gap-1">
           {/* Content */}
@@ -62,7 +80,7 @@ const Post = ({
           </p>
 
           {attachedFiles &&
-            (isDetailAttachedFiles ? (
+            (isDetailAttachedFiles || isDetail ? (
               <div className={`gap-2 flex flex-col`}>
                 {attachedFiles.map((item, index) => (
                   <div
@@ -82,12 +100,14 @@ const Post = ({
                   </div>
                 ))}
 
-                <button
-                  className="text-sm w-fit font-medium text-dark-gray"
-                  onClick={() => setIsDetailAttachedFiles(false)}
-                >
-                  Thu gọn
-                </button>
+                {!isDetail && (
+                  <button
+                    className="text-sm w-fit font-medium text-dark-gray"
+                    onClick={() => setIsDetailAttachedFiles(false)}
+                  >
+                    Thu gọn
+                  </button>
+                )}
               </div>
             ) : (
               <button
@@ -129,7 +149,7 @@ const Post = ({
           </div>
         </div>
       </PostBase>
-    </>
+    </div>
   );
 };
 

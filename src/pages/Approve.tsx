@@ -21,7 +21,7 @@ const Approve = () => {
 
   return (
     <div className="w-full">
-      <div className="min-h-[64px] flex flex-col justify-end sticky top-0 bg-white pt-2 gap-1">
+      <div className="min-h-[64px] flex flex-col justify-end z-10 sticky top-0 bg-white pt-2 gap-1">
         <div className="px-5">
           <div className="bg-extra-light-gray flex items-center rounded-full px-4 py-3 gap-2">
             <svg

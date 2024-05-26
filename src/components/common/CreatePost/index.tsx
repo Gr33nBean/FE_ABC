@@ -4,7 +4,15 @@ import PhoneIcon from "@/assets/images/Home/phone.svg";
 import SendIcon from "@/assets/images/Home/send.svg";
 import Button from "@/components/ui/Home/Button";
 import Avatar from "../Avatar";
-const CreatePost = () => {
+const CreatePost = ({
+  placeholder,
+  buttonText,
+  isComment,
+}: {
+  placeholder?: string;
+  buttonText?: string;
+  isComment?: boolean;
+}) => {
   return (
     <div
       className={`w-full py-1 px-5 border-b-[0.5px] border-extra-light-gray`}
@@ -16,7 +24,7 @@ const CreatePost = () => {
         <p
           className={`text-xl font-normal text-dark-gray !outline-none text-left flex-1 resize-none `}
         >
-          Có gì mới?!
+          {placeholder ? placeholder : " Có gì mới?!"}
         </p>
       </div>
 
@@ -28,14 +36,22 @@ const CreatePost = () => {
           <button>
             <img src={FileIcon} alt="" />
           </button>
-          <button>
-            <img src={PhoneIcon} alt="" />
-          </button>
-          <button>
-            <img src={SendIcon} alt="" />
-          </button>
+          {!isComment && (
+            <>
+              <button>
+                <img src={PhoneIcon} alt="" />
+              </button>
+              <button>
+                <img src={SendIcon} alt="" />
+              </button>
+            </>
+          )}
         </div>
-        <Button text="Đăng bài" onClick={() => {}} className={`w-[154px]`} />
+        <Button
+          text={buttonText ? buttonText : "Đăng bài"}
+          onClick={() => {}}
+          className={`w-[154px]`}
+        />
       </div>
     </div>
   );

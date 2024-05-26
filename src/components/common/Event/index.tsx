@@ -1,15 +1,20 @@
 import ArrowRightIcon from "@/assets/images/Home/arrow-right.svg";
 import PostBase, { PostBaseType } from "../PostBase";
 import LongContent from "../PostBase/LongContent";
+import { useNavigate } from "react-router-dom";
+import { routes } from "@/constants/layout";
 
 export type EventProps = PostBaseType & {
+  id: string;
   content: string;
   room: string;
   from: string;
   to: string;
+  isDetail?: boolean;
 };
 
 const Event = ({
+  id,
   userName,
   createdAt,
   tag,
@@ -19,7 +24,10 @@ const Event = ({
   room,
   from,
   to,
+  isDetail,
 }: EventProps) => {
+  const navigate = useNavigate();
+
   return (
     <PostBase
       userName={userName}
@@ -28,9 +36,17 @@ const Event = ({
       name={name}
       joinAmount={joinAmount}
       typeTag="event"
+      onClick={
+        isDetail
+          ? undefined
+          : () => {
+              navigate(routes.event + "/" + id);
+            }
+      }
     >
       <div className="w-full flex flex-col gap-1">
         <LongContent content={content} />
+
         <div
           className={`flex items-stretch bg-orange bg-opacity-10 w-full rounded-sm text-orange`}
         >
@@ -48,6 +64,12 @@ const Event = ({
             <span>{to}</span>
           </div>
         </div>
+
+        {isDetail && (
+          <button className="w-full mt-1 text-center py-2 border border-blue rounded-md text-blue text-sm font-semibold bg-blue bg-opacity-5 hover:opacity-70">
+            Xác nhận tham gia
+          </button>
+        )}
       </div>
     </PostBase>
   );

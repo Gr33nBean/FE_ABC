@@ -1,10 +1,11 @@
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigation } from "react-router-dom";
 import Menu from "./Menu";
 import { useAppSelector } from "@/redux/hooks";
 import { selectIsLogin } from "@/redux/features/accountSlice";
 import toast from "react-hot-toast";
 import AvatarButton from "./AvatarButton";
 import RightMenu from "./RightMenu";
+import Loading from "./Loading";
 
 export async function LayoutLoader() {
   const contacts = { huy: "huy" };
@@ -13,10 +14,10 @@ export async function LayoutLoader() {
 
 const Layout = () => {
   const a = useLoaderData();
-  console.log(a);
   const isLogin = useAppSelector(selectIsLogin);
+  const { state } = useNavigation();
+  console.log(a);
   console.log(isLogin);
-
   return (
     <div className="w-full flex items-start justify-center relative">
       {/*  */}
@@ -49,7 +50,7 @@ const Layout = () => {
       {/*  */}
       <div className="w-full lg:w-[1050px] flex items-start gap-6 relative">
         <div className="min-h-[100vh] border-r flex-1 border-extra-light-gray">
-          <Outlet />
+          {state === "loading" ? <Loading /> : <Outlet />}
         </div>
 
         {/*  */}

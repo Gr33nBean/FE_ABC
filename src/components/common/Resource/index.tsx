@@ -1,5 +1,5 @@
 import { getColorFromType, getVNLabel } from "@/constants/type.ts";
-import PostImages from "../Post/PostImages.tsx/index.tsx";
+import PostImages from "../Post/PostImages/index.tsx";
 import PostBase from "../PostBase/index.tsx";
 
 export type ResourceProps = {

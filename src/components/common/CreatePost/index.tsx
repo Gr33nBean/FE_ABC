@@ -4,6 +4,8 @@ import PhoneIcon from "@/assets/images/Home/phone.svg";
 import SendIcon from "@/assets/images/Home/send.svg";
 import Button from "@/components/ui/Home/Button";
 import Avatar from "../Avatar";
+import { useAppDispatch } from "@/redux/hooks";
+import { setIsOpenCreate } from "@/redux/features/dialogSlice";
 const CreatePost = ({
   placeholder,
   buttonText,
@@ -13,12 +15,16 @@ const CreatePost = ({
   buttonText?: string;
   isComment?: boolean;
 }) => {
+  const dispatch = useAppDispatch();
   return (
     <div
-      className={`w-full py-1 px-5 border-b-[0.5px] border-extra-light-gray`}
+      className={`w-full py-1 px-5 border-b-[0.5px] border-extra-light-gray cursor-pointer`}
+      onClick={() => {
+        dispatch(setIsOpenCreate(true));
+      }}
     >
       <div
-        className={`w-full flex items-center gap-2 pb-14 pt-2 border-b-[0.5px] border-extra-light-gray`}
+        className={`w-full flex items-center gap-2 pb-14 pt-2 border-b-[0.5px] border-extra-light-gray pointer-events-none`}
       >
         <Avatar />
         <p
@@ -28,7 +34,7 @@ const CreatePost = ({
         </p>
       </div>
 
-      <div className={`w-full pl-[48px] py-2 gap-2 flex`}>
+      <div className={`w-full pl-[48px] py-2 gap-2 flex pointer-events-none`}>
         <div className={`flex flex-1`}>
           <button>
             <img src={ImageIcon} alt="" />

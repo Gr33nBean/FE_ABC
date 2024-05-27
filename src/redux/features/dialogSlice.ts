@@ -5,6 +5,7 @@ interface DialogState {
     index: number;
     images: string[];
   };
+  isOpenCreate: boolean;
 }
 
 const initialState: DialogState = {
@@ -12,6 +13,7 @@ const initialState: DialogState = {
     index: -1,
     images: [],
   },
+  isOpenCreate: false,
 };
 
 const dialogSlice = createSlice({
@@ -27,11 +29,18 @@ const dialogSlice = createSlice({
     ) {
       state.isOpenViewImage = action.payload;
     },
+
+    setIsOpenCreate(state, action: PayloadAction<boolean>) {
+      state.isOpenCreate = action.payload;
+    },
   },
 });
 
 export const selectIsOpenViewImage = (state: { dialog: DialogState }) =>
   state.dialog.isOpenViewImage;
 
-export const { setIsOpenViewImage } = dialogSlice.actions;
+export const selectIsOpenCreate = (state: { dialog: DialogState }) =>
+  state.dialog.isOpenCreate;
+
+export const { setIsOpenViewImage, setIsOpenCreate } = dialogSlice.actions;
 export default dialogSlice.reducer;

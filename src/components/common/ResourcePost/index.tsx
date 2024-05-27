@@ -1,6 +1,6 @@
 import Avatar from "../Avatar/index.tsx";
 import ThreeDotsIcon from "@/assets/images/Home/three-dots.svg";
-import PostImages from "../Post/PostImages.tsx/index.tsx";
+import PostImages from "../Post/PostImages/index.tsx";
 import { getColorFromType, getVNLabel } from "@/constants/type.ts";
 
 export type ResourceProps = {

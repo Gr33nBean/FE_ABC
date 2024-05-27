@@ -1,11 +1,13 @@
 import { setIsOpenViewImage } from "@/redux/features/dialogSlice";
 import { useAppDispatch } from "@/redux/hooks";
 
-type PostImagesProps = {
+const PostImages = ({
+  imageUrls,
+  onClick,
+}: {
   imageUrls: string[];
-};
-
-const PostImages = ({ imageUrls }: PostImagesProps) => {
+  onClick?: () => void;
+}) => {
   const dispatch = useAppDispatch();
   return (
     <div className={`flex gap-2 max-w-full overflow-x-auto overflow-y-hidden`}>
@@ -15,13 +17,16 @@ const PostImages = ({ imageUrls }: PostImagesProps) => {
           src={item}
           alt="image"
           className={`h-[156px] w-[117px] rounded-[10px] object-cover cursor-pointer`}
-          onClick={() =>
-            dispatch(
-              setIsOpenViewImage({
-                index,
-                images: imageUrls,
-              })
-            )
+          onClick={
+            onClick
+              ? onClick
+              : () =>
+                  dispatch(
+                    setIsOpenViewImage({
+                      index,
+                      images: imageUrls,
+                    })
+                  )
           }
         />
       ))}

@@ -1,14 +1,14 @@
-import { Outlet, useNavigate, useNavigation } from "react-router-dom";
-import Menu from "./Menu";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { selectSignedUser, setSignedUser } from "@/redux/features/accountSlice";
-import toast from "react-hot-toast";
-import AvatarButton from "./AvatarButton";
-import RightMenu from "./RightMenu";
-import Loading from "./Loading";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase";
+import { selectSignedUser, setSignedUser } from "@/redux/features/accountSlice";
+import { setIsOpenCreate } from "@/redux/features/dialogSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { userService } from "@/services/user.service";
+import { onAuthStateChanged } from "firebase/auth";
+import { Outlet, useNavigate, useNavigation } from "react-router-dom";
+import AvatarButton from "./AvatarButton";
+import Loading from "./Loading";
+import Menu from "./Menu";
+import RightMenu from "./RightMenu";
 export async function LayoutLoader() {
   const contacts = { huy: "huy" };
   return { contacts };
@@ -47,14 +47,7 @@ const Layout = () => {
                 <button
                   className="w-[90%] mt-1 text-center py-3 bg-blue hover:bg-opacity-90 text-white text-[24px] font-bold rounded-full transition-all duration-150 hidden lg:!block"
                   onClick={() => {
-                    toast((t) => (
-                      <div
-                        onClick={() => toast.dismiss(t.id)}
-                        className="cursor-pointer"
-                      >
-                        Comming soon
-                      </div>
-                    ));
+                    dispatch(setIsOpenCreate(true));
                   }}
                 >
                   Đăng bài

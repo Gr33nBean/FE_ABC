@@ -1,18 +1,17 @@
 import { useState } from "react";
-import PostImages from "./PostImages.tsx";
+import PostImages from "./PostImages/index.tsx";
 
 import CommentIcon from "@/assets/images/Common/Chat_Circle.svg";
-import DownloadFileIcon from "@/assets/images/Common/Download_Package.svg";
-import FolderIcon from "@/assets/images/Common/Folder.svg";
 import AttachmentIcon from "@/assets/images/Common/Label.svg";
 import { HeartIcon } from "./SVG/index.tsx";
 
 import SaveIcon from "@/assets/images/Common/Bookmark.svg";
 import ShareIcon from "@/assets/images/Common/Share_iOS_Export.svg";
+import { routes } from "@/constants/layout.ts";
+import { useNavigate } from "react-router-dom";
 import LongContent from "../PostBase/LongContent/index.tsx";
 import PostBase, { PostBaseType } from "../PostBase/index.tsx";
-import { useNavigate } from "react-router-dom";
-import { routes } from "@/constants/layout.ts";
+import PostFiles from "./PostFiles/index.tsx";
 
 export type PostProps = PostBaseType & {
   id: string;
@@ -82,23 +81,7 @@ const Post = ({
           {attachedFiles &&
             (isDetailAttachedFiles || isDetail ? (
               <div className={`gap-2 flex flex-col`}>
-                {attachedFiles.map((item, index) => (
-                  <div
-                    key={index}
-                    className={` h-8 rounded bg-blue bg-opacity-5 p-[6px] flex flex-row justify-between items-center`}
-                  >
-                    <div className={`flex flex-row items-center gap-2`}>
-                      <img src={FolderIcon} />
-                      <span className={`text-sm font-semibold text-blue`}>
-                        {item}
-                      </span>
-                    </div>
-
-                    <button>
-                      <img src={DownloadFileIcon} />
-                    </button>
-                  </div>
-                ))}
+                <PostFiles attachedFiles={attachedFiles} />
 
                 {!isDetail && (
                   <button

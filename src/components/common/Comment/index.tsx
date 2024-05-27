@@ -1,4 +1,4 @@
-import PostImages from "../Post/PostImages.tsx";
+import PostImages from "../Post/PostImages/index.tsx";
 import PostBase, { PostBaseType } from "../PostBase";
 import FolderIcon from "@/assets/images/Common/Folder.svg";
 import DownloadFileIcon from "@/assets/images/Common/Download_Package.svg";

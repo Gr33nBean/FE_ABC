@@ -13,6 +13,7 @@ import ViewImage from "./components/common/Dialog/ViewImage";
 import PostDetail from "./pages/PostDetail";
 import EventDetail from "./pages/EventDetail";
 import Login from "./pages/Login";
+import Create from "./components/common/Dialog/Create";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -79,6 +80,7 @@ function App() {
     <Suspense fallback={<div>Loading...</div>}>
       <RouterProvider router={router} />
       <ViewImage />
+      <Create />
     </Suspense>
   );
 }

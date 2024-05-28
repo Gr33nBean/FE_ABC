@@ -17,6 +17,26 @@ export const userService = {
       return [];
     }
   },
+
+  getAll: async () => {
+    try {
+      const res = await fetch(domain + "/User/getALL", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          page: 1,
+          limit: 10000,
+        }),
+      }).then((res) => res.json());
+      console.log(res);
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
   // updateUser: async (data: User[]) => {
   //   try {
   //     const res = await fetch(domain + "/User", {

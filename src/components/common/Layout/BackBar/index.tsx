@@ -10,7 +10,7 @@ const BackBar = ({
   return (
     <div
       className={cn(
-        "w-full h-[64px] flex items-center px-5 gap-2 bg-white sticky top-0 z-10",
+        "w-full h-[64px] flex items-center px-5 gap-2 bg-white sticky top-0 z-20",
         className
       )}
     >

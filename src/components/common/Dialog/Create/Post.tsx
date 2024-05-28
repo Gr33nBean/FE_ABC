@@ -1,5 +1,228 @@
+import { useRef, useState } from "react";
+import Avatar from "../../Avatar";
+import Input from "../../Input";
+import FileInput from "../../Input/File";
+import Select from "../../Input/Select";
+import Textarea from "../../Input/Textarea";
+import { useQuery } from "@tanstack/react-query";
+import { PostType, User } from "@/services/type";
+import { postTypeService } from "@/services/postType.service";
+import { TABS } from "@/constants";
+import Mention from "../../Input/Mention";
+import { selectSignedUser } from "@/redux/features/accountSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { SubmitHandler, useForm } from "react-hook-form";
+import Button from "@/components/ui/Home/Button";
+
+type createPost = {
+  title: string;
+  postTypeId: string;
+  content: string;
+};
+
 const Post = () => {
-  return <div>Post</div>;
+  const signedUser = useAppSelector(selectSignedUser);
+  const { data } = useQuery<PostType[]>({
+    queryKey: ["home_tabs"],
+    queryFn: async () => {
+      const res = await postTypeService.getAll();
+      return res;
+    },
+  });
+
+  console.log(signedUser);
+
+  const [images, setImages] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [mentionData, setMentionData] = useState<User[]>([]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+  } = useForm<createPost>({
+    defaultValues: {},
+  });
+
+  const onSubmit: SubmitHandler<createPost> = (data) => {
+    console.log(data);
+
+    return;
+    reset();
+    setImages([]);
+    setFiles([]);
+    setMentionData([]);
+  };
+
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  const imageRef = useRef<any>(null);
+  const fileRef = useRef<any>(null);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+      <div className="p-5 flex flex-col">
+        {/*  */}
+        <div className=" flex items-stretch gap-2">
+          {/*  */}
+          <div className="flex flex-col items-center gap-2">
+            <Avatar src={signedUser?.avatar} />
+            <div className="bg-extra-light-gray w-[1px] flex-1" />
+          </div>
+          {/*  */}
+          <div className="flex-1 flex flex-col gap-4">
+            <p className={`text-lg font-bold flex-1`}>{signedUser?.username}</p>
+
+            <div>
+              <Input
+                label="Tiêu đề"
+                {...register("title", { required: true, maxLength: 100 })}
+              />
+              {errors.title && (
+                <p className="text-pink text-xs">Tiêu đề không được trống</p>
+              )}
+            </div>
+            <Select
+              label="Loại bài đăng"
+              {...register("postTypeId", { required: true })}
+            >
+              {[
+                { id: "", name: "" },
+                ...(data?.filter((item) => item.id != TABS.EVENT) ?? []),
+              ].map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </Select>
+            <Textarea
+              rows={3}
+              className="resize-none"
+              label="Nội dung"
+              {...register("content", { maxLength: 300 })}
+            />
+
+            <FileInput
+              ref={imageRef}
+              label={images.length > 0 ? "Hình ảnh" : ""}
+              files={images}
+              type="image"
+              handleChange={setImages}
+            />
+
+            <FileInput
+              ref={fileRef}
+              label={files.length > 0 ? "Đính kèm" : ""}
+              files={files}
+              type="file"
+              handleChange={setFiles}
+            />
+
+            <Mention
+              label="Lượt nhắc"
+              mentionData={mentionData}
+              onChangeMentionData={(value: User) => {
+                const exist = mentionData.find(
+                  (item) => item.uid === value.uid
+                );
+                if (exist) {
+                  setMentionData(
+                    mentionData.filter((item) => item.uid !== value.uid)
+                  );
+                } else {
+                  setMentionData([...mentionData, value]);
+                }
+              }}
+              deleteMentionData={() => {
+                setMentionData([]);
+              }}
+            />
+          </div>
+        </div>
+
+        {/*  */}
+        <div className="flex items-center w-full gap-2">
+          <div className="size-[48px] flex justify-center items-center">
+            <Avatar src={signedUser?.avatar} className="size-[26px]" />
+          </div>
+          <div className="flex-1 flex items-center gap-3">
+            <p className="flex-1 text- font-light text-dark-gray">
+              Thêm bài đăng
+            </p>
+
+            {[
+              {
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1da1f2"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                    <circle cx="9" cy="9" r="2" />
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                  </svg>
+                ),
+                onclick: () => {
+                  if (imageRef.current) {
+                    // click
+                    imageRef.current.click();
+                  }
+                },
+              },
+              {
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1da1f2"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                    <path d="M10 9H8" />
+                    <path d="M16 13H8" />
+                    <path d="M16 17H8" />
+                  </svg>
+                ),
+                onclick: () => {
+                  if (fileRef.current) {
+                    // click
+                    fileRef.current.click();
+                  }
+                },
+              },
+            ].map((item, index) => (
+              <button key={index} onClick={item.onclick}>
+                {item.icon}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      {isValid && (
+        <div className="w-full  bg-white py-3 px-5 flex items-center gap-2 border-t border-extra-light-gray">
+          <p className="flex-1 text-sm font-light text-dark-gray">
+            Tất cả mọi người có thể xem và bình luận
+          </p>
+          <Button type="submit" text="Đăng bài" className="px-4" />
+        </div>
+      )}
+    </form>
+  );
 };
 
 export default Post;

@@ -83,14 +83,14 @@ export interface PostType {
 
 export interface Post {
   id: number;
-  postTypeId: number; // reference to PostType.id
+  postTypeId: string; // reference to PostType.id
   creatorUid: string; // reference to User.uid
   eventId?: number; // reference to Event.id, can be null
   mentionUid: string[]; // reference to User.uid
   title: string;
   content: string; // text
-  images: FileType[];
-  files: FileType[];
+  images: string[];
+  files: string[];
   likes: number;
   comments: number;
   createAt: string; // timestamp
@@ -180,7 +180,7 @@ export interface EventType {
 
 export interface Event {
   id: number;
-  eventTypeId: number; // reference to EventType.id
+  eventTypeId: string; // reference to EventType.id
   reporterUid: string; // reference to User.uid
   resourceUsingId: number[]; // reference to ResourceUsing.id
   postsId: number[]; // mới thêm

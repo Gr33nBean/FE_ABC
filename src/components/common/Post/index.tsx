@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import LongContent from "../PostBase/LongContent/index.tsx";
 import PostBase, { PostBaseType } from "../PostBase/index.tsx";
 import PostFiles from "./PostFiles/index.tsx";
+import PostMention from "./PostMention/index.tsx";
 
 export type PostProps = PostBaseType & {
   id: string;
@@ -64,19 +65,7 @@ const Post = ({
 
           <PostImages imageUrls={imageUrls} />
 
-          <p className={`flex items-center gap-2 text-base text-dark-gray`}>
-            {tags.slice(0, 3).map((item, index) => (
-              <span
-                key={index}
-                className={`font-semibold text-blue cursor-pointer `}
-              >{`@${item}`}</span>
-            ))}
-            {tags.length > 3 && (
-              <span className={` font-normal`}>{`+${
-                tags.length - 3
-              } người khác`}</span>
-            )}
-          </p>
+          <PostMention mentionData={tags} />
 
           {attachedFiles &&
             (isDetailAttachedFiles || isDetail ? (

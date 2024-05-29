@@ -9,7 +9,7 @@ import { useState } from "react";
 const tabs = [
   { label: "Tất cả", value: TABS.ALL },
   { label: "Mượn thiết bị", value: TABS.RESOURCE },
-  { label: "Yêu cầu liên đơn vị", value: TABS.REQUEST },
+  { label: "Yêu cầu", value: TABS.REQUEST },
 ];
 
 const Approve = () => {

@@ -67,10 +67,10 @@ export const DocumentType: TypeItem = {
 export const Department: TypeItem = {
   color: "#3BB97C",
   items: [
-    { label: "HumanResources", label_vn: "Nhân sự" },
-    { label: "Communications", label_vn: "Truyền thông" },
+    { label: "HR", label_vn: "Nhân sự" },
+    { label: "Media", label_vn: "Truyền thông" },
     { label: "Finance", label_vn: "Tài chính" },
-    { label: "Administration", label_vn: "Hành chính" },
+    { label: "Admin", label_vn: "Hành chính" },
   ],
 };
 

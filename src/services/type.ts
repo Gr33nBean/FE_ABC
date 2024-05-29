@@ -47,7 +47,7 @@ export interface Permission {
 
 export interface User {
   uid: string;
-  departmentId: number; // reference to Department.id
+  departmentId: string; // reference to Department.id
   grade: Grade;
   username: string;
   birthday: number; // date
@@ -143,6 +143,7 @@ export interface ResourceType {
 export interface Resource {
   id: number;
   resourceTypeId: number; // reference to ResourceType.id
+  resourceType?: ResourceType;
   images: string[];
   name: string;
   description: string; // text

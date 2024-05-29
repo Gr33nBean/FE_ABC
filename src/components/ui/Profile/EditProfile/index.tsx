@@ -1,10 +1,14 @@
 import CustomDialog from "@/components/common/Dialog";
 import Input from "@/components/common/Input";
-import { selectSignedUser } from "@/redux/features/accountSlice";
-import { useAppSelector } from "@/redux/hooks";
+import Textarea from "@/components/common/Input/Textarea";
+import { selectSignedUser, setSignedUser } from "@/redux/features/accountSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { GGThumbnail, uploadService } from "@/services/upload.service";
+import { userService } from "@/services/user.service";
 
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 type EditFormType = {
   userName: string;
@@ -15,6 +19,7 @@ type EditFormType = {
 const EditProfile = () => {
   const signedUser = useAppSelector(selectSignedUser);
   console.log(signedUser);
+  const dispatch = useAppDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
   const [avatar, setAvatar] = useState<File | undefined>();
@@ -34,8 +39,51 @@ const EditProfile = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<EditFormType> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<EditFormType> = async (data) => {
+    if (!signedUser) {
+      return;
+    }
+    let payload: {
+      uid: string;
+      departmentId: string;
+      grade: string;
+      username: string;
+      birthday: number;
+      email: string;
+      avatar: string;
+      description: string;
+      permissionIdToCRUD: string[];
+      status: string;
+    } = {
+      uid: signedUser.uid,
+      departmentId: signedUser.departmentId,
+      grade: signedUser.grade,
+      username: data.userName,
+      birthday: new Date(data.birthday).getTime() / 1000,
+      email: signedUser.email,
+      avatar: signedUser.avatar,
+      description: data.description,
+      permissionIdToCRUD: signedUser.permissionIdToCRUD,
+      status: signedUser.status,
+    };
+    if (avatar) {
+      const res = await uploadService.uploadFiles([avatar]);
+      payload.avatar = GGThumbnail + res[0].id;
+    }
+    const res = await userService.updateUser([payload]);
+    if (res) {
+      toast.success("Cập nhật thành công");
+      setIsOpen(false);
+      dispatch(
+        setSignedUser({
+          ...signedUser,
+          username: payload.username,
+          birthday: payload.birthday,
+          description: payload.description,
+          avatar: payload.avatar,
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -124,8 +172,9 @@ const EditProfile = () => {
                   </span>
                 )}
 
-                <Input
+                <Textarea
                   label="Mô tả"
+                  rows={4}
                   {...register("description")}
                   placeholder="Mô tả"
                 />

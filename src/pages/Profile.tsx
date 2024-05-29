@@ -29,7 +29,7 @@ const Profile = () => {
         <p className="text-[20px] font-semibold text-black">{data?.username}</p>
       </BackBar>
 
-      <ProfileInfo data={data} />
+      <ProfileInfo data={uid ? data : signedUser} />
     </div>
   );
 };

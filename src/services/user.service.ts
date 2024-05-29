@@ -37,20 +37,33 @@ export const userService = {
       return [];
     }
   },
-  // updateUser: async (data: User[]) => {
-  //   try {
-  //     const res = await fetch(domain + "/User", {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     }).then((res) => res.json());
-  //     console.log(res);
+  updateUser: async (
+    data: {
+      uid: string;
+      departmentId: string;
+      grade: string;
+      username: string;
+      birthday: number;
+      email: string;
+      avatar: string;
+      description: string;
+      permissionIdToCRUD: string[];
+      status: string;
+    }[]
+  ) => {
+    try {
+      const res = await fetch(domain + "/User", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res);
+      console.log(res);
 
-  //     return res;
-  //   } catch (error) {
-  //     return [];
-  //   }
-  // },
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
 };

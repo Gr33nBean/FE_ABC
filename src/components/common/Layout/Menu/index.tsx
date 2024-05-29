@@ -32,12 +32,12 @@ const Menu = () => {
           name: "Tìm kiếm",
           to: routes.search,
         },
-        {
-          icon: <MenuIcon type="notification" />,
-          activeIcon: <MenuIcon isActive={true} type="notification" />,
-          name: "Thông báo",
-          to: routes.notification,
-        },
+        // {
+        //   icon: <MenuIcon type="notification" />,
+        //   activeIcon: <MenuIcon isActive={true} type="notification" />,
+        //   name: "Thông báo",
+        //   to: routes.notification,
+        // },
         // {
         //   icon: <MenuIcon type="message" />,
         //   activeIcon: <MenuIcon isActive={true} type="message" />,

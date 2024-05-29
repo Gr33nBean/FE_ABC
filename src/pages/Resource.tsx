@@ -1,20 +1,52 @@
 import ResourcePost, { ResourceProps } from "@/components/common/Resource";
 import Tabs from "@/components/common/Tabs";
 import { TABS } from "@/constants";
-import { useState } from "react";
-const tabs = [
-  { label: "Tất cả", value: TABS.ALL },
-  { label: "Phòng", value: TABS.ROOM },
-  { label: "Thiết bị", value: TABS.DEVICE },
-  { label: "Vật dụng", value: TABS.FURNITURE },
-  { label: "Khác", value: TABS.OTHER },
-];
+import { resourceService } from "@/services/resource.service";
+import { resourceTypeService } from "@/services/resourceType.service";
+import { Resource as ResourceItemType, ResourceType } from "@/services/type";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+
 const Resource = () => {
+  const { data: tabsData } = useQuery<ResourceType[]>({
+    queryKey: ["resource_tabs"],
+    queryFn: async () => {
+      const res = await resourceTypeService.getAll();
+      return res;
+    },
+  });
+
+  console.log(tabsData);
+
+  const tabs = useMemo(() => {
+    return [
+      { label: "Tất cả", value: TABS.ALL },
+      ...(tabsData
+        ?.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }))
+        .filter((item) => item.value !== TABS.OTHER) ?? []),
+      { label: "Khác", value: TABS.OTHER },
+    ];
+  }, [tabsData]);
+
   const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);
 
   const onChangeTab = (value: string) => {
     setSelectedTab(value);
   };
+
+  const { data: resourceData } = useQuery<ResourceItemType[]>({
+    queryKey: ["resource_data"],
+    queryFn: async () => {
+      const res = await resourceService.getAll();
+      return res;
+    },
+  });
+
+  console.log(resourceData);
+
   return (
     <div className="w-full">
       <div className="min-h-[64px] flex flex-col justify-end sticky z-10 top-0 bg-white pt-2 gap-1">
@@ -48,24 +80,38 @@ const Resource = () => {
         />
       </div>
 
-      {[
-        ...Array.from({ length: 3 }).fill({
-          name: "Macbook Pro M1 2021",
-          createdAt: "12 giờ",
-          type: "device",
-          content:
-            "Macbook Pro M1 là dòng sản phẩm có thiết kế mỏng nhẹ, sang trọng và tinh tế. Nhân viên sử dụng cần bảo quản tốt thiết bị, tài sản của công ty.",
-          imageUrls: [
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN-GGuUBa9frqFf_fN74hERS96U60Kc3tRmCSJevvFQg&s",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN-GGuUBa9frqFf_fN74hERS96U60Kc3tRmCSJevvFQg&s",
-          ],
-          isFree: true,
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <ResourcePost {...(item as ResourceProps)} />
-        </div>
-      ))}
+      {resourceData
+        ?.filter((item) => {
+          if (selectedTab == TABS.ALL) {
+            return true;
+          } else if (selectedTab == TABS.OTHER) {
+            if (!item?.resourceType?.id) {
+              return true;
+            }
+            return false;
+          } else {
+            if (item?.resourceType?.id == selectedTab) {
+              return true;
+            }
+            return false;
+          }
+        })
+        .map((item, index) => {
+          const itemData: ResourceProps = {
+            id: item.id,
+            createAt: "", //item.createAt,
+            name: item.name,
+            description: item.description,
+            images: item?.images ?? [],
+            type: item?.resourceType?.name ?? "",
+            isFree: item.isFree,
+          };
+          return (
+            <div key={index}>
+              <ResourcePost {...itemData} />
+            </div>
+          );
+        })}
     </div>
   );
 };

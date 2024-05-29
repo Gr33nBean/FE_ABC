@@ -3,32 +3,37 @@ import PostImages from "../Post/PostImages/index.tsx";
 import PostBase from "../PostBase/index.tsx";
 
 export type ResourceProps = {
-  createdAt: string;
+  id: number;
+  createAt: string;
   name: string;
-  content: string;
-  imageUrls: string[];
+  description: string;
+  images: string[];
   type: string;
   isFree: boolean;
 };
 const ResourcePost = ({
-  createdAt,
+  id,
+  createAt,
   name,
-  content,
-  imageUrls,
+  description,
+  images,
   type,
   isFree,
 }: ResourceProps) => {
   const color = getColorFromType("resource");
+
+  console.log(id);
+
   return (
-    <PostBase userName={name} createdAt={createdAt}>
+    <PostBase userName={name} createdAt={createAt}>
       <div className={`flex-1 flex flex-col gap-1`}>
         {/* Content */}
         <div className="w-full flex flex-col gap-1 text-base font-normal text-black">
-          <p>Mô tả: {content}</p>
+          <p>Mô tả: {description}</p>
           <p>Trạng thái: {isFree ? "Có sẵn" : "Không có sẵn"}</p>
         </div>
 
-        <PostImages imageUrls={imageUrls} />
+        <PostImages imageUrls={images} />
 
         <div className="w-full flex flex-col text-sm font-semibold gap-1 ">
           <button

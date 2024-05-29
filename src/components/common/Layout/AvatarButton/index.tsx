@@ -24,7 +24,8 @@ const AvatarButton = () => {
 
         <p className="text-lg flex-1 w-[calc(100%-48px-24px-28px)] text-start leading-5 text-black hidden lg:!block">
           <span className="font-bold block text-ellipsis truncate">
-            {signedUser?.username}
+            {/* get the final name split by " " */}
+            {signedUser?.username.split(" ").reverse()[0]}
           </span>
           <span className="font-normal block truncate">
             @{signedUser?.email}

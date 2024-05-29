@@ -1,24 +1,38 @@
+import { Event } from "@/services/type";
 import ShortEvent from "../ShortEvent";
+import { useState } from "react";
 
-const TodayEvent = () => {
+const TodayEvent = ({ data }: { data?: Event[] }) => {
+  const [isShowAll, setIsShowAll] = useState<boolean>(false);
   return (
     <div className="w-full pt-5 rounded-2xl flex flex-col border border-extra-light-gray">
       <p className="text-[24px] font-bold w-full text-start px-5 pb-3 text-black">
         Sự kiện hôm nay
       </p>
 
-      {Array.from({ length: 2 }).map((_, index) => (
-        <div
-          className="w-full px-5 py-3 hover:bg-extra-extra-light-gray cursor-pointer"
-          key={index}
-        >
-          <ShortEvent />
+      {data?.slice(0, isShowAll ? data?.length ?? 0 : 3).map((item, index) => (
+        <div className="w-full" key={index}>
+          <ShortEvent
+            id={item?.id ?? 0}
+            name={item?.name ?? ""}
+            room={item?.resource?.name ?? ""}
+            time={new Date(item.startAt * 1000)}
+          />
         </div>
       ))}
 
-      <p className="w-full text-center py-3 cursor-pointer text-blue hover:underline text-[18px] font-normal">
-        Xem tất cả
-      </p>
+      {data?.length == 0 ? (
+        <p className="w-full text-center py-3 cursor-pointer text-dark-gray text-[18px] font-normal">
+          Không có sự kiện trong ngày
+        </p>
+      ) : (
+        <p
+          className="w-full text-center py-3 cursor-pointer text-blue hover:underline text-[18px] font-normal"
+          onClick={() => setIsShowAll(!isShowAll)}
+        >
+          {isShowAll ? "Thu gọn" : "Xem tất cả"}
+        </p>
+      )}
     </div>
   );
 };

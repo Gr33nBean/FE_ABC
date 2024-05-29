@@ -5,14 +5,18 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { useMemo } from "react";
+import { Event } from "@/services/type";
+import ShortEvent from "../../Event/ShortEvent";
 
 const Dates = ({
   monthAndYear,
+  data,
 }: {
   monthAndYear: {
     month: number;
     year: number;
   };
+  data?: Event[];
 }) => {
   const allDays = useMemo(() => {
     const { startDate, endDate } = getDateRange(
@@ -41,12 +45,23 @@ const Dates = ({
             item.getFullYear() === new Date().getFullYear();
 
           const isThisMonth = item.getMonth() + 1 === monthAndYear.month;
+
+          const eventThisDate = data?.filter((event) => {
+            const start = new Date(event.startAt * 1000);
+
+            return (
+              start.getDate() === item.getDate() &&
+              start.getMonth() + 1 === item.getMonth() + 1 &&
+              start.getFullYear() === item.getFullYear()
+            );
+          });
           return (
             <Popover key={index}>
               <PopoverButton
                 className={`w-full rounded-md aspect-square flex items-center justify-center relative hover:bg-blue hover:text-white transition-all duration-150 cursor-pointer ${
                   isToday ? "bg-orange text-white" : ""
                 }`}
+                disabled={eventThisDate?.length === 0}
               >
                 {/*  */}
                 <p
@@ -62,7 +77,7 @@ const Dates = ({
                   <div
                     className={`absolute w-full left-0 bottom-0 flex items-center justify-evenly py-[2px]`}
                   >
-                    {Array.from({ length: 3 }).map((_, index) => (
+                    {eventThisDate?.map((_, index) => (
                       <div
                         key={index}
                         className={`aspect-square size-[6px] rounded-full ${
@@ -75,11 +90,18 @@ const Dates = ({
               </PopoverButton>
               <PopoverPanel
                 anchor="top start"
-                className="flex  bg-white rounded-xl shadow-2xl flex-col p-5"
+                className="flex min-w-[240px] max-h-[400px] bg-white rounded-xl shadow-2xl flex-col border"
               >
-                <p>Comming soon</p>
-                <p>Comming soon</p>
-                <p>Comming soon</p>
+                {eventThisDate?.map((item, index) => (
+                  <div key={index} className="w-full">
+                    <ShortEvent
+                      id={item?.id ?? 0}
+                      name={item?.name ?? ""}
+                      room={item?.resource?.name ?? ""}
+                      time={new Date(item.startAt * 1000)}
+                    />
+                  </div>
+                ))}
               </PopoverPanel>
             </Popover>
           );

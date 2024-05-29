@@ -182,15 +182,18 @@ export interface EventType {
 export interface Event {
   id: number;
   eventTypeId: string; // reference to EventType.id
+  eventType?: EventType;
   reporterUid: string; // reference to User.uid
-  resourceUsingId: number[]; // reference to ResourceUsing.id
+  user?: User;
+  resourceId: number; // reference to Resource.id
+  resource?: Resource;
   postsId: number[]; // mới thêm
   participantsUid: string[]; // reference to User.uid
   permissionIdToCRUDPost: Grade[];
   name: string;
   description: string; // text
-  startAt: string; // timestamp
-  endAt: string; // timestamp
+  startAt: number; // timestamp
+  endAt: number; // timestamp
   createAt: string; // timestamp
   updateAt: string; // timestamp
   status: StatusType;

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Dates from "./Dates";
+import { Event } from "@/services/type";
 
-const Calendar = () => {
+const Calendar = ({ data }: { data?: Event[] }) => {
   const [monthAndYear, setMonthAndYear] = useState<{
     month: number;
     year: number;
@@ -79,7 +80,7 @@ const Calendar = () => {
       </div>
 
       <div className="w-full">
-        <Dates monthAndYear={monthAndYear} />
+        <Dates data={data} monthAndYear={monthAndYear} />
       </div>
     </div>
   );

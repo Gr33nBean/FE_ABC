@@ -1,4 +1,5 @@
 export const GGThumbnail = "https://drive.google.com/thumbnail?id=";
+export const GGFile = "https://drive.google.com/file/d/";
 
 export const uploadService = {
   uploadFiles: async (files: File[]) => {

@@ -1,18 +1,23 @@
+import Button from "@/components/ui/Home/Button";
+import { TABS } from "@/constants";
+import { selectSignedUser } from "@/redux/features/accountSlice";
+import { setIsLoading, setIsOpenCreate } from "@/redux/features/dialogSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { postTypeService } from "@/services/postType.service";
+import { PostType, User } from "@/services/type";
+import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Avatar from "../../Avatar";
 import Input from "../../Input";
 import FileInput from "../../Input/File";
+import Mention from "../../Input/Mention";
 import Select from "../../Input/Select";
 import Textarea from "../../Input/Textarea";
-import { useQuery } from "@tanstack/react-query";
-import { PostType, User } from "@/services/type";
-import { postTypeService } from "@/services/postType.service";
-import { TABS } from "@/constants";
-import Mention from "../../Input/Mention";
-import { selectSignedUser } from "@/redux/features/accountSlice";
-import { useAppSelector } from "@/redux/hooks";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Button from "@/components/ui/Home/Button";
+import { uploadService } from "@/services/upload.service";
+import { getFileFromId } from "@/utils";
+import { postService } from "@/services/post.service";
+import toast from "react-hot-toast";
 
 type createPost = {
   title: string;
@@ -29,9 +34,7 @@ const Post = () => {
       return res;
     },
   });
-
-  console.log(signedUser);
-
+  const dispatch = useAppDispatch();
   const [images, setImages] = useState<File[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [mentionData, setMentionData] = useState<User[]>([]);
@@ -45,14 +48,48 @@ const Post = () => {
     defaultValues: {},
   });
 
-  const onSubmit: SubmitHandler<createPost> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<createPost> = async (data) => {
+    dispatch(setIsLoading(true));
+    if (!signedUser?.uid) {
+      return;
+    }
+    const payload: {
+      postTypeId: string;
+      creatorUid: string;
+      eventId: number | null;
+      mentionUid: string[];
+      title: string;
+      content: string;
+      images: string[];
+      files: string[];
+      status: "create";
+    } = {
+      postTypeId: data.postTypeId,
+      creatorUid: signedUser.uid,
+      eventId: null,
+      mentionUid: mentionData.map((item) => item.uid),
+      title: data.title,
+      content: data.content,
+      images: [],
+      files: [],
+      status: "create",
+    };
+    if (images && images.length > 0) {
+      const res = await uploadService.uploadFiles(images);
+      payload.images = getFileFromId(res, "image").map((item) => item.url);
+    }
 
-    return;
+    const res = await postService.createPost([payload]);
+    console.log(res);
+    if (res) {
+      toast.success("Tạo bài thành công.");
+    }
     reset();
     setImages([]);
     setFiles([]);
     setMentionData([]);
+    dispatch(setIsLoading(false));
+    dispatch(setIsOpenCreate(false));
   };
 
   /* eslint-disable  @typescript-eslint/no-explicit-any */

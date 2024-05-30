@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <div className="w-full flex justify-center py-10">
+    <div className="w-full flex justify-center ">
       <div
         className="animate-spin"
         style={{

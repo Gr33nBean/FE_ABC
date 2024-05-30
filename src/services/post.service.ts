@@ -5,7 +5,7 @@ export const postService = {
     data: {
       postTypeId: string;
       creatorUid: string;
-      eventId: 0;
+      eventId: number | null;
       mentionUid: string[];
       title: string;
       content: string;
@@ -21,6 +21,38 @@ export const postService = {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+      }).then((res) => res.json());
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
+  getAll: async () => {
+    try {
+      const res = await fetch(domain + "/Post/getAll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          page: 1,
+          limit: 100,
+        }),
+      }).then((res) => res.json());
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
+  getAllByUid: async (uid: string) => {
+    try {
+      const res = await fetch(domain + `/Post/getAllByUid?uid=${uid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }).then((res) => res.json());
 
       return res;

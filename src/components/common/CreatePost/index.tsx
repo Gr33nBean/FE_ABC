@@ -4,8 +4,9 @@ import PhoneIcon from "@/assets/images/Home/phone.svg";
 import SendIcon from "@/assets/images/Home/send.svg";
 import Button from "@/components/ui/Home/Button";
 import Avatar from "../Avatar";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setIsOpenCreate } from "@/redux/features/dialogSlice";
+import { selectSignedUser } from "@/redux/features/accountSlice";
 const CreatePost = ({
   placeholder,
   buttonText,
@@ -16,6 +17,7 @@ const CreatePost = ({
   isComment?: boolean;
 }) => {
   const dispatch = useAppDispatch();
+  const signedUser = useAppSelector(selectSignedUser);
   return (
     <div
       className={`w-full py-1 px-5 border-b-[0.5px] border-extra-light-gray cursor-pointer`}
@@ -26,7 +28,7 @@ const CreatePost = ({
       <div
         className={`w-full flex items-center gap-2 pb-14 pt-2 border-b-[0.5px] border-extra-light-gray pointer-events-none`}
       >
-        <Avatar />
+        <Avatar src={signedUser?.avatar} />
         <p
           className={`text-xl font-normal text-dark-gray !outline-none text-left flex-1 resize-none `}
         >

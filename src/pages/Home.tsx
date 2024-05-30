@@ -1,16 +1,32 @@
 import CreatePost from "@/components/common/CreatePost";
-import Event, { EventProps } from "@/components/common/Event";
+import Event from "@/components/common/Event";
 import Tabs from "@/components/common/Tabs";
 
-import Post, { PostProps } from "@/components/common/Post";
+import Post from "@/components/common/Post";
 
 import { TABS } from "@/constants";
-import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { PostType } from "@/services/type";
+import { eventService } from "@/services/event.service";
+import { postService } from "@/services/post.service";
 import { postTypeService } from "@/services/postType.service";
+import {
+  Event as EventDataType,
+  Post as PostDataType,
+  PostType,
+} from "@/services/type";
+import {
+  mapEventToUIObject,
+  mapPostToUIObject,
+  sortByTimestamp,
+} from "@/utils";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import { selectIsLoading } from "@/redux/features/dialogSlice";
+import Loading from "@/components/common/Layout/Loading";
 
 const Home = () => {
+  const isJustCreate = useAppSelector(selectIsLoading);
+
   const { data } = useQuery<PostType[]>({
     queryKey: ["home_tabs"],
     queryFn: async () => {
@@ -21,7 +37,6 @@ const Home = () => {
 
   const tabs = useMemo(() => {
     return [
-      { label: "Tất cả", value: TABS.ALL },
       ...(data
         ?.map((item) => ({
           label: item.name,
@@ -32,11 +47,42 @@ const Home = () => {
     ];
   }, [data]);
 
-  const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);
+  console.log(tabs);
+
+  const [selectedTab, setSelectedTab] = useState<string>("");
+  useEffect(() => {
+    setSelectedTab(tabs[0].value);
+  }, [tabs]);
 
   const onChangeTab = (value: string) => {
     setSelectedTab(value);
   };
+
+  const { data: eventData } = useQuery<EventDataType[]>({
+    queryKey: ["all_events", !isJustCreate],
+    queryFn: async () => {
+      const res = await eventService.getAll();
+      if (res) {
+        return res;
+      } else {
+        return [];
+      }
+    },
+    enabled: selectedTab === TABS.EVENT || !isJustCreate,
+  });
+
+  const { data: postData } = useQuery<PostDataType[]>({
+    queryKey: ["all_posts", !isJustCreate],
+    queryFn: async () => {
+      const res = await postService.getAll();
+      if (res) {
+        return res;
+      } else {
+        return [];
+      }
+    },
+    enabled: selectedTab !== TABS.EVENT,
+  });
 
   return (
     <div className="w-full max-w-full">
@@ -50,7 +96,7 @@ const Home = () => {
       <CreatePost />
 
       <div
-        className={`w-full h-16 py-[21px] justify-center items-center flex border-b-[0.5px] border-extra-light-gray`}
+        className={`hidden w-full h-16 py-[21px] justify-center items-center border-b-[0.5px] border-extra-light-gray`}
       >
         <button>
           <p className={`text-blue text-lg text-center`}>
@@ -59,47 +105,42 @@ const Home = () => {
         </button>
       </div>
 
-      {[
-        ...Array.from({ length: 3 }).fill({
-          id: "123",
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Welcome",
-          name: "Chào đón thực tập sinh",
-          content:
-            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-          joinAmount: 200,
-          room: "A1.03",
-          from: "08:00 10/05/2024",
-          to: "09:00 10/05/2024",
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Event {...(item as EventProps)} />
-        </div>
-      ))}
+      {selectedTab == TABS.EVENT && (
+        <>
+          {eventData
+            ?.sort((a, b) => sortByTimestamp(a.createAt, b.createAt))
+            .map((item) => (
+              <Event {...mapEventToUIObject(item)} />
+            ))}
 
-      {[
-        ...Array.from({ length: 3 }).fill({
-          id: "123",
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Sharing",
-          name: "Chào đón thực tập sinh",
-          content:
-            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-          imageUrls: [
-            "https://photo-zmp3.zadn.vn/avatars/5/5/b/7/55b787b8189794c412c305027d1f239d.jpg",
-            "https://images2.thanhnien.vn/528068263637045248/2023/11/5/dieu-kien-3-16991575841451246800633.jpeg",
-          ],
-          tags: ["vhng", "trhph", "trtrith", "trtrith", "trtrith", "trtrith"],
-          attachedFiles: ["test1.png", "test1.png", "test1.png"],
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Post {...(item as PostProps)} />
-        </div>
-      ))}
+          {eventData?.length == 0 && (
+            <p className="w-full text-center py-3 cursor-pointer text-dark-gray text-[18px] font-normal">
+              Không có sự kiện
+            </p>
+          )}
+
+          {!eventData && <Loading />}
+        </>
+      )}
+
+      {selectedTab !== TABS.EVENT && (
+        <>
+          {postData
+            ?.filter((item) => item.postTypeId === selectedTab)
+            .sort((a, b) => sortByTimestamp(a.createAt, b.createAt))
+            .map((item) => (
+              <Post {...mapPostToUIObject(item)} />
+            ))}
+
+          {postData?.filter((item) => item.postTypeId === selectedTab).length ==
+            0 && (
+            <p className="w-full text-center py-3 cursor-pointer text-dark-gray text-[18px] font-normal">
+              Không có bài đăng
+            </p>
+          )}
+          {!postData && <Loading />}
+        </>
+      )}
     </div>
   );
 };

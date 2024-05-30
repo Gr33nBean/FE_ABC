@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
 import CustomDialog from "..";
 import Tabs from "../../Tabs";
-import Post from "./Post";
 import Event from "./Event";
+import Post from "./Post";
 import Request from "./Request";
 
 const tabs = [

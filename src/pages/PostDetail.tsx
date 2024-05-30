@@ -8,7 +8,7 @@ const PostDetail = () => {
   console.log(id);
 
   const data: PostProps = {
-    id: "123",
+    id: 123,
     userName: "phtrhuy",
     createdAt: "12 giờ",
     tag: "Sharing",

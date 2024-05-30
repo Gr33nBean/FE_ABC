@@ -26,12 +26,16 @@ const TodayEvent = ({ data }: { data?: Event[] }) => {
           Không có sự kiện trong ngày
         </p>
       ) : (
-        <p
-          className="w-full text-center py-3 cursor-pointer text-blue hover:underline text-[18px] font-normal"
-          onClick={() => setIsShowAll(!isShowAll)}
-        >
-          {isShowAll ? "Thu gọn" : "Xem tất cả"}
-        </p>
+        <>
+          {data && data.length > 3 && (
+            <p
+              className="w-full text-center py-3 cursor-pointer text-blue hover:underline text-[18px] font-normal"
+              onClick={() => setIsShowAll(!isShowAll)}
+            >
+              {isShowAll ? "Thu gọn" : "Xem tất cả"}
+            </p>
+          )}
+        </>
       )}
     </div>
   );

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "@/constants/layout";
 
 export type EventProps = PostBaseType & {
-  id: string;
+  id: number;
   content: string;
   room: string;
   from: string;
@@ -25,6 +25,7 @@ const Event = ({
   from,
   to,
   isDetail,
+  avatar,
 }: EventProps) => {
   const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ const Event = ({
       name={name}
       joinAmount={joinAmount}
       typeTag="event"
+      avatar={avatar}
       onClick={
         isDetail
           ? undefined

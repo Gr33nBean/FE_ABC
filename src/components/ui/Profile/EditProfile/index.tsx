@@ -2,9 +2,11 @@ import CustomDialog from "@/components/common/Dialog";
 import Input from "@/components/common/Input";
 import Textarea from "@/components/common/Input/Textarea";
 import { selectSignedUser, setSignedUser } from "@/redux/features/accountSlice";
+import { setIsLoading } from "@/redux/features/dialogSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { GGThumbnail, uploadService } from "@/services/upload.service";
+import { uploadService } from "@/services/upload.service";
 import { userService } from "@/services/user.service";
+import { getFileFromId } from "@/utils";
 
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -43,7 +45,8 @@ const EditProfile = () => {
     if (!signedUser) {
       return;
     }
-    let payload: {
+    dispatch(setIsLoading(true));
+    const payload: {
       uid: string;
       departmentId: string;
       grade: string;
@@ -68,7 +71,7 @@ const EditProfile = () => {
     };
     if (avatar) {
       const res = await uploadService.uploadFiles([avatar]);
-      payload.avatar = GGThumbnail + res[0].id;
+      payload.avatar = getFileFromId(res, "image")[0].url;
     }
     const res = await userService.updateUser([payload]);
     if (res) {
@@ -84,6 +87,8 @@ const EditProfile = () => {
         })
       );
     }
+
+    dispatch(setIsLoading(false));
   };
 
   useEffect(() => {

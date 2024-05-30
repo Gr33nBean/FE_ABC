@@ -62,7 +62,13 @@ const Layout = () => {
           {/*  */}
           <div className="w-full lg:w-[1050px] flex items-start gap-6 relative">
             <div className="min-h-[100vh] border-r w-full flex-1 border-extra-light-gray">
-              {state === "loading" ? <Loading /> : <Outlet />}
+              {state === "loading" ? (
+                <div className="w-full py-10">
+                  <Loading />
+                </div>
+              ) : (
+                <Outlet />
+              )}
             </div>
 
             {/*  */}

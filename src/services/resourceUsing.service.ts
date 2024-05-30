@@ -19,4 +19,22 @@ export const resourceUsingService = {
       return [];
     }
   },
+
+  getAllByUid: async (uid: string) => {
+    try {
+      const res = await fetch(
+        domain + "/ResourceUsing/getAllByBorrowerUid?uid=" + uid,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((res) => res.json());
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
 };

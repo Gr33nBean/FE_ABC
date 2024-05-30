@@ -83,8 +83,10 @@ export interface PostType {
 
 export interface Post {
   id: number;
-  postTypeId: string; // reference to PostType.id
+  postTypeId: string;
+  postType?: PostType; // reference to PostType.id
   creatorUid: string; // reference to User.uid
+  user?: User;
   eventId?: number; // reference to Event.id, can be null
   mentionUid: string[]; // reference to User.uid
   title: string;
@@ -93,8 +95,8 @@ export interface Post {
   files: string[];
   likes: number;
   comments: number;
-  createAt: string; // timestamp
-  updateAt: string; // timestamp
+  createAt: number; // timestamp
+  updateAt: number; // timestamp
   status: StatusType;
   // if eventId is valid
   // -> event.permissionIdToCRUDPost > postType.permissionIdToCRUDPost
@@ -142,7 +144,7 @@ export interface ResourceType {
 
 export interface Resource {
   id: number;
-  resourceTypeId: number; // reference to ResourceType.id
+  resourceTypeId: string; // reference to ResourceType.id
   resourceType?: ResourceType;
   images: string[];
   name: string;
@@ -156,15 +158,18 @@ export interface Resource {
 export interface ResourceUsing {
   id: number;
   resourceId: number; // reference to Resource.id
+  resource?: Resource;
   reporterUid: string; // reference to User.uid
+  reporter?: User;
   borrowerUid: string; // reference to User.uid
-  startAt: string; // timestamp
-  endAt: string; // timestamp
+  borrower?: User;
+  startAt: number; // timestamp
+  endAt: number; // timestamp
   approvalStatus: ApprovalStatus;
-  decidedAt: string; // timestamp
+  decidedAt: number; // timestamp
   decisionDetail?: string; // text | null
-  createAt: string; // timestamp
-  updateAt: string; // timestamp
+  createAt: number; // timestamp
+  updateAt: number; // timestamp
   status: StatusType;
 }
 
@@ -194,8 +199,8 @@ export interface Event {
   description: string; // text
   startAt: number; // timestamp
   endAt: number; // timestamp
-  createAt: string; // timestamp
-  updateAt: string; // timestamp
+  createAt: number; // timestamp
+  updateAt: number; // timestamp
   status: StatusType;
 }
 

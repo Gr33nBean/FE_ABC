@@ -9,7 +9,7 @@ const EventDetail = () => {
   console.log(id);
 
   const data: EventProps = {
-    id: "123",
+    id: 123,
     userName: "phtrhuy",
     createdAt: "12 giờ",
     tag: "Welcome",

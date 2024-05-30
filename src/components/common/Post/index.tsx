@@ -13,9 +13,14 @@ import LongContent from "../PostBase/LongContent/index.tsx";
 import PostBase, { PostBaseType } from "../PostBase/index.tsx";
 import PostFiles from "./PostFiles/index.tsx";
 import PostMention from "./PostMention/index.tsx";
+import { useAppSelector } from "@/redux/hooks.ts";
+import { selectSignedUser } from "@/redux/features/accountSlice.ts";
+import { useQuery } from "@tanstack/react-query";
+import { User } from "@/services/type.ts";
+import { userService } from "@/services/user.service.ts";
 
 export type PostProps = PostBaseType & {
-  id: string;
+  id: number;
   content: string;
   imageUrls: string[];
   tags: string[];
@@ -35,14 +40,29 @@ const Post = ({
   tags,
   attachedFiles,
   isDetail,
-  eventId,
+  avatar,
 }: PostProps) => {
-  console.log(eventId);
-
   const [isDetailAttachedFiles, setIsDetailAttachedFiles] =
     useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const signedUser = useAppSelector(selectSignedUser);
+
+  const { data: users } = useQuery<User[]>({
+    queryKey: ["all_users"],
+    queryFn: async () => {
+      const res = await userService.getAll();
+      if (signedUser && signedUser.uid) {
+        return res.filter(
+          (user: User) => user?.uid !== (signedUser?.uid ?? "")
+        );
+      } else {
+        return res;
+      }
+    },
+  });
+
   return (
     <div>
       <PostBase
@@ -51,6 +71,7 @@ const Post = ({
         tag={tag}
         name={name}
         typeTag={"post"}
+        avatar={avatar}
         onClick={
           isDetail
             ? undefined
@@ -65,7 +86,12 @@ const Post = ({
 
           <PostImages imageUrls={imageUrls} />
 
-          <PostMention mentionData={tags} />
+          <PostMention
+            mentionData={tags.map((item) => {
+              const email = users?.find((user) => user?.uid === item)?.email;
+              return email ?? "";
+            })}
+          />
 
           {attachedFiles &&
             (isDetailAttachedFiles || isDetail ? (
@@ -87,6 +113,9 @@ const Post = ({
                   setIsDetailAttachedFiles(true);
                 }}
                 className={`flex items-center gap-2 text-base font-semibold text-blue cursor-pointer `}
+                style={{
+                  display: attachedFiles.length > 0 ? "flex" : "none",
+                }}
               >
                 <img src={AttachmentIcon} />
                 <span>{`${attachedFiles.length} file đính kèm`}</span>

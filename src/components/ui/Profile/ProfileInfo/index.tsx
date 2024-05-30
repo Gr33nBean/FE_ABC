@@ -10,7 +10,6 @@ import EditProfile from "../EditProfile";
 
 const ProfileInfo = ({ data }: { data?: User }) => {
   const signedUser = useAppSelector(selectSignedUser);
-  console.log(data);
 
   return (
     <div className="w-full">

@@ -1,16 +1,15 @@
+import Button from "@/components/ui/Home/Button";
+import { TABS } from "@/constants";
 import { selectSignedUser } from "@/redux/features/accountSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { eventTypeService } from "@/services/eventType.service";
+import { EventType } from "@/services/type";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Avatar from "../../Avatar";
 import Input from "../../Input";
-import Textarea from "../../Input/Textarea";
 import Select from "../../Input/Select";
-import { TABS } from "@/constants";
-import { EventType } from "@/services/type";
-import Button from "@/components/ui/Home/Button";
+import Textarea from "../../Input/Textarea";
 type requestEvent = {
   name: string;
   reporterUid: string;

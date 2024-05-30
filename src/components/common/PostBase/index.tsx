@@ -11,6 +11,7 @@ export type PostBaseType = {
   tag?: string;
   name?: string;
   joinAmount?: number;
+  avatar?: string;
 };
 
 const PostBase = ({
@@ -22,6 +23,7 @@ const PostBase = ({
   children,
   joinAmount,
   onClick,
+  avatar,
 }: PostBaseType & { children: React.ReactNode; onClick?: () => void }) => {
   const [color, setColor] = React.useState<string>("");
   useEffect(() => {
@@ -36,7 +38,7 @@ const PostBase = ({
     >
       <div className="absolute inset-0 size-full " onClick={onClick}></div>
       <div className="z-[5] h-fit">
-        <Avatar />
+        <Avatar src={avatar} />
       </div>
 
       <div className={`flex-1 flex flex-col gap-1 z-[5]`}>

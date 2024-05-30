@@ -1,19 +1,20 @@
 import { Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Layout, { LayoutLoader } from "./components/common/Layout";
-import Error from "./pages/Error";
-import Home from "./pages/Home";
-import { routes } from "./constants/layout";
-import Search from "./pages/Search";
-import Approve from "./pages/Approve";
-import Resource from "./pages/Resource";
-import Profile from "./pages/Profile";
-import Notification from "./pages/Notification";
-import ViewImage from "./components/common/Dialog/ViewImage";
-import PostDetail from "./pages/PostDetail";
-import EventDetail from "./pages/EventDetail";
-import Login from "./pages/Login";
 import Create from "./components/common/Dialog/Create";
+import ViewImage from "./components/common/Dialog/ViewImage";
+import Layout, { LayoutLoader } from "./components/common/Layout";
+import ProcessLoading from "./components/common/Layout/Loading/ProcessLoading";
+import { routes } from "./constants/layout";
+import Approve from "./pages/Approve";
+import Error from "./pages/Error";
+import EventDetail from "./pages/EventDetail";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Notification from "./pages/Notification";
+import PostDetail from "./pages/PostDetail";
+import Profile from "./pages/Profile";
+import Resource from "./pages/Resource";
+import Search from "./pages/Search";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -81,6 +82,7 @@ function App() {
       <RouterProvider router={router} />
       <ViewImage />
       <Create />
+      <ProcessLoading />
     </Suspense>
   );
 }

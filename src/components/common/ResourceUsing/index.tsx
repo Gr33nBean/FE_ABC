@@ -6,6 +6,7 @@ import Tag from "../Tag";
 import ApproveButton from "../PostBase/ApproveButton";
 
 export type ResourceUsingProps = PostBaseType & {
+  id: number;
   resource: {
     name: string;
     description: string;

@@ -7,6 +7,7 @@ export const routes = {
   resource: "/resource",
   document: "/document",
   profile: "/profile",
+  user: "/user",
   post: "/post",
   event: "/event",
 };

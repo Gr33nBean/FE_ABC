@@ -11,7 +11,7 @@ const PostImages = ({
   const dispatch = useAppDispatch();
   return (
     <div className={`flex gap-2 max-w-full overflow-x-auto overflow-y-hidden`}>
-      {imageUrls.map((item, index) => (
+      {imageUrls?.map((item, index) => (
         <img
           key={index}
           src={item}

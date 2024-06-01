@@ -5,16 +5,21 @@ import SendIcon from "@/assets/images/Home/send.svg";
 import Button from "@/components/ui/Home/Button";
 import Avatar from "../Avatar";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setIsOpenCreate } from "@/redux/features/dialogSlice";
+import {
+  setIsCreatePostInEvent,
+  setIsOpenCreate,
+} from "@/redux/features/dialogSlice";
 import { selectSignedUser } from "@/redux/features/accountSlice";
 const CreatePost = ({
   placeholder,
   buttonText,
   isComment,
+  isCreatePostInEvent,
 }: {
   placeholder?: string;
   buttonText?: string;
   isComment?: boolean;
+  isCreatePostInEvent?: number;
 }) => {
   const dispatch = useAppDispatch();
   const signedUser = useAppSelector(selectSignedUser);
@@ -23,6 +28,11 @@ const CreatePost = ({
       className={`w-full py-1 px-5 border-b-[0.5px] border-extra-light-gray cursor-pointer`}
       onClick={() => {
         dispatch(setIsOpenCreate(true));
+        isCreatePostInEvent &&
+          dispatch(setIsCreatePostInEvent(isCreatePostInEvent));
+      }}
+      style={{
+        pointerEvents: isComment ? "none" : "all",
       }}
     >
       <div
@@ -41,7 +51,11 @@ const CreatePost = ({
           <button>
             <img src={ImageIcon} alt="" />
           </button>
-          <button>
+          <button
+            style={{
+              display: "none",
+            }}
+          >
             <img src={FileIcon} alt="" />
           </button>
           {!isComment && (

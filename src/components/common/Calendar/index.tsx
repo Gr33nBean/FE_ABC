@@ -1,6 +1,6 @@
+import { Event } from "@/services/type";
 import { useState } from "react";
 import Dates from "./Dates";
-import { Event } from "@/services/type";
 
 const Calendar = ({ data }: { data?: Event[] }) => {
   const [monthAndYear, setMonthAndYear] = useState<{

@@ -119,7 +119,11 @@ const Home = () => {
             </p>
           )}
 
-          {!eventData && <Loading />}
+          {!eventData && (
+            <div className="w-full py-10">
+              <Loading />
+            </div>
+          )}
         </>
       )}
 
@@ -138,7 +142,11 @@ const Home = () => {
               Không có bài đăng
             </p>
           )}
-          {!postData && <Loading />}
+          {!postData && (
+            <div className="w-full py-10">
+              <Loading />
+            </div>
+          )}
         </>
       )}
     </div>

@@ -6,7 +6,6 @@ import Tag from "../Tag";
 import ApproveButton from "../PostBase/ApproveButton";
 
 export type ResourceUsingProps = PostBaseType & {
-  id: number;
   resource: {
     name: string;
     description: string;
@@ -35,23 +34,44 @@ const ResourceUsing = ({
   approvalStatus,
   reporter,
   isNeedApproval,
+  uid,
+  id,
 }: ResourceUsingProps) => {
   const color = getColorFromType("resource");
+
   return (
     <PostBase
+      id={id}
+      type="resourceUsing"
       userName={userName}
       createdAt={createdAt}
       tag={tag}
       name={name}
       typeTag={"resource"}
+      uid={uid}
+      isResource={true}
     >
       <div className="w-full flex flex-col gap-1 text-base font-normal text-black">
         <p>Bắt đầu: {getFormatDateString(startAt)}</p>
         <p>Kết thúc: {getFormatDateString(endAt)}</p>
-        <p>
+        <p
+          style={{
+            display: approvalStatus ? "block" : "none",
+          }}
+        >
           Trạng thái: {getWording(approvalStatus)}
-          {decidedAt ? " lúc " + getFormatDateString(decidedAt) : ""}
-          {decisionDetail ? ". Mô tả: " + decisionDetail : ""}
+          {
+            <>
+              {approvalStatus == "pending" ? (
+                ""
+              ) : (
+                <>
+                  {decidedAt ? " lúc " + getFormatDateString(decidedAt) : ""}
+                  {decisionDetail ? ". Mô tả: " + decisionDetail : ""}
+                </>
+              )}
+            </>
+          }
         </p>
 
         {reporter && (
@@ -99,7 +119,9 @@ const ResourceUsing = ({
           </button>
         </div>
 
-        {isNeedApproval && <ApproveButton color={color} />}
+        {isNeedApproval && (
+          <ApproveButton type="resourceUsing" id={id} color={color} />
+        )}
       </div>
     </PostBase>
   );

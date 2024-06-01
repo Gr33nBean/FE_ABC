@@ -3,8 +3,11 @@ import { cn } from "@/utils";
 import { NavLink } from "react-router-dom";
 import MenuIcon from "./MenuIcon";
 import MoreButton from "./MoreButton";
+import { selectSignedUser } from "@/redux/features/accountSlice";
+import { useAppSelector } from "@/redux/hooks";
 
 const Menu = () => {
+  const signedUser = useAppSelector(selectSignedUser);
   return (
     <nav className="w-full flex flex-col items-center lg:items-start">
       {/* Logo */}
@@ -26,12 +29,12 @@ const Menu = () => {
           name: "Trang chủ",
           to: routes.home,
         },
-        {
-          icon: <MenuIcon type="search" />,
-          activeIcon: <MenuIcon isActive={true} type="search" />,
-          name: "Tìm kiếm",
-          to: routes.search,
-        },
+        // {
+        //   icon: <MenuIcon type="search" />,
+        //   activeIcon: <MenuIcon isActive={true} type="search" />,
+        //   name: "Tìm kiếm",
+        //   to: routes.search,
+        // },
         // {
         //   icon: <MenuIcon type="notification" />,
         //   activeIcon: <MenuIcon isActive={true} type="notification" />,
@@ -50,6 +53,7 @@ const Menu = () => {
           name: "Phê duyệt",
           to: routes.approve,
           canBeHiden: true,
+          needAdmin: true,
         },
         {
           icon: <MenuIcon type="resource" />,
@@ -71,31 +75,33 @@ const Menu = () => {
           name: "Hồ sơ",
           to: routes.profile,
         },
-      ].map((item, index) => (
-        <NavLink
-          key={index}
-          to={item.to}
-          className={cn(
-            "rounded-full w-fit hover:bg-extra-extra-light-gray pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6",
-            item.canBeHiden && "[@media(min-height:500px)]:!block hidden "
-          )}
-          children={({ isActive }) => (
-            <div className={`flex items-center transition-all duration-150`}>
-              <div className="size-fit transition-all duration-150">
-                {isActive ? item.activeIcon : item.icon}
+      ]
+        .filter((item) => !item.needAdmin || signedUser?.grade === "admin")
+        .map((item, index) => (
+          <NavLink
+            key={index}
+            to={item.to}
+            className={cn(
+              "rounded-full w-fit hover:bg-extra-extra-light-gray pl-3 py-3 transition-all duration-150 pr-3 lg:pr-6",
+              item.canBeHiden && "[@media(min-height:500px)]:!block hidden "
+            )}
+            children={({ isActive }) => (
+              <div className={`flex items-center transition-all duration-150`}>
+                <div className="size-fit transition-all duration-150">
+                  {isActive ? item.activeIcon : item.icon}
+                </div>
+                <p
+                  className={cn(
+                    "pl-6 text-[24px] transition-all duration-150 hidden lg:!block",
+                    isActive ? "font-bold" : "font-normal"
+                  )}
+                >
+                  {item.name}
+                </p>
               </div>
-              <p
-                className={cn(
-                  "pl-6 text-[24px] transition-all duration-150 hidden lg:!block",
-                  isActive ? "font-bold" : "font-normal"
-                )}
-              >
-                {item.name}
-              </p>
-            </div>
-          )}
-        />
-      ))}
+            )}
+          />
+        ))}
 
       <div className="[@media(min-height:500px)]:hidden ">
         <MoreButton />

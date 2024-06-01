@@ -26,6 +26,7 @@ const Event = ({
   to,
   isDetail,
   avatar,
+  uid,
 }: EventProps) => {
   const navigate = useNavigate();
 
@@ -38,6 +39,9 @@ const Event = ({
       joinAmount={joinAmount}
       typeTag="event"
       avatar={avatar}
+      uid={uid}
+      id={id}
+      type="event"
       onClick={
         isDetail
           ? undefined
@@ -52,14 +56,16 @@ const Event = ({
         <div
           className={`flex items-stretch bg-orange bg-opacity-10 w-full rounded-sm text-orange`}
         >
-          <p
-            className={`w-[30%] border-r-2 border-extra-extra-light-gray flex items-center justify-center text-center text-base font-extrabold py-3`}
-          >
-            Room {room}
-          </p>
+          {room && (
+            <p
+              className={`w-[30%] border-r-2 border-extra-extra-light-gray flex items-center justify-center text-center text-base font-extrabold py-3`}
+            >
+              Room {room}
+            </p>
+          )}
 
           <div
-            className={`flex flex-1 justify-center items-center gap-2 text-center text-sm font-bold `}
+            className={`flex flex-1 justify-center items-center gap-2 text-center text-sm font-bold  py-3`}
           >
             <span>{from}</span>
             <img src={ArrowRightIcon} alt="arrow" />

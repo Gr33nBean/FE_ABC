@@ -188,7 +188,7 @@ const EditProfile = () => {
 
             <button
               type="submit"
-              className="w-full mt-2 text-center bg-blue rounded-lg py-2 text-white font-semibold"
+              className="w-full mt-4 text-center bg-blue rounded-lg py-2 text-white font-semibold"
             >
               Lưu
             </button>

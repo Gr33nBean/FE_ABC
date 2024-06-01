@@ -1,6 +1,6 @@
 const Avatar = ({ className, src }: { className?: string; src?: string }) => {
   return (
-    <div
+    <p
       className={`size-[48px] aspect-square rounded-full overflow-hidden ${className}`}
     >
       <img
@@ -10,7 +10,7 @@ const Avatar = ({ className, src }: { className?: string; src?: string }) => {
         }
         className={`size-full object-cover`}
       />
-    </div>
+    </p>
   );
 };
 

@@ -1,23 +1,55 @@
-import Request, { RequestProps } from "@/components/common/Request";
-import ResourceUsing, {
-  ResourceUsingProps,
-} from "@/components/common/ResourceUsing";
+import Loading from "@/components/common/Layout/Loading";
+import Request from "@/components/common/Request";
+import ResourceUsing from "@/components/common/ResourceUsing";
 import Tabs from "@/components/common/Tabs";
 import { TABS } from "@/constants";
+import { selectIsLoading } from "@/redux/features/dialogSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { requestService } from "@/services/request.service";
+import { resourceUsingService } from "@/services/resourceUsing.service";
+import {
+  Request as RequestDataType,
+  ResourceUsing as ResourceUsingDataType,
+} from "@/services/type";
+import {
+  mapRequestToUIObject,
+  mapResourceUsingToUIObject,
+  sortByTimestamp,
+} from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 const tabs = [
-  { label: "Tất cả", value: TABS.ALL },
+  // { label: "Tất cả", value: TABS.ALL },
   { label: "Mượn thiết bị", value: TABS.RESOURCE },
   { label: "Yêu cầu", value: TABS.REQUEST },
 ];
 
 const Approve = () => {
-  const [selectedTab, setSelectedTab] = useState<string>(TABS.ALL);
+  const [selectedTab, setSelectedTab] = useState<string>(TABS.RESOURCE);
+  const isJustCreate = useAppSelector(selectIsLoading);
 
   const onChangeTab = (value: string) => {
     setSelectedTab(value);
   };
+
+  const { data: resourceUsingData } = useQuery<ResourceUsingDataType[]>({
+    queryKey: ["resourceUsing_all", !isJustCreate],
+    queryFn: async () => {
+      const res = await resourceUsingService.getAll();
+      return res;
+    },
+    enabled: selectedTab === TABS.RESOURCE,
+  });
+
+  const { data: requestData } = useQuery<RequestDataType[]>({
+    queryKey: [`request_all`, !isJustCreate],
+    queryFn: async () => {
+      const res = await requestService.getAll();
+      return res;
+    },
+    enabled: selectedTab === TABS.REQUEST,
+  });
 
   return (
     <div className="w-full">
@@ -51,49 +83,73 @@ const Approve = () => {
           listTabs={tabs}
         />
       </div>
+      {selectedTab == TABS.RESOURCE && (
+        <>
+          {resourceUsingData ? (
+            <>
+              {resourceUsingData.length > 0 ? (
+                <>
+                  {resourceUsingData
+                    .sort((a, b) => sortByTimestamp(a.createAt, b.createAt))
+                    .map((item, index) => {
+                      return (
+                        <div key={index}>
+                          <ResourceUsing
+                            {...mapResourceUsingToUIObject(item)}
+                            isNeedApproval={item.approvalStatus == "pending"}
+                          />
+                        </div>
+                      );
+                    })}
+                </>
+              ) : (
+                <p className="py-10 w-full text-center text-dark-gray">
+                  Chưa mượn tài nguyên
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="w-full py-10">
+                <Loading />
+              </div>
+            </>
+          )}
+        </>
+      )}
 
-      {[
-        ...Array.from({ length: 3 }).fill({
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Device",
-          name: "Mượn thiết bị",
-          resource: {
-            name: "Macbook Pro M1 2021",
-            description: "",
-            images: [
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN-GGuUBa9frqFf_fN74hERS96U60Kc3tRmCSJevvFQg&s",
-            ],
-            resourceType: "Device",
-          },
-          startAt: new Date(),
-          endAt: new Date(),
-          approvalStatus: "pending",
-          isNeedApproval: true,
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <ResourceUsing {...(item as ResourceUsingProps)} />
-        </div>
-      ))}
-
-      {[
-        ...Array.from({ length: 3 }).fill({
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Off",
-          name: "Xin nghỉ",
-          description: "Thực hiện đồ án ở Trường Đại học",
-          startAt: new Date(),
-          endAt: new Date(),
-          approvalStatus: "pending",
-          isNeedApproval: true,
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Request {...(item as RequestProps)} />
-        </div>
-      ))}
+      {selectedTab == TABS.REQUEST && (
+        <>
+          {requestData ? (
+            <>
+              {requestData.length > 0 ? (
+                <>
+                  {requestData
+                    .sort((a, b) => sortByTimestamp(a.createAt, b.createAt))
+                    .map((item, index) => {
+                      return (
+                        <div key={index}>
+                          <Request
+                            {...mapRequestToUIObject(item)}
+                            isNeedApproval={item.approvalStatus == "pending"}
+                          />
+                        </div>
+                      );
+                    })}
+                </>
+              ) : (
+                <p className="py-10 w-full text-center text-dark-gray">
+                  Chưa có yêu cầu
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="w-full py-10">
+              <Loading />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

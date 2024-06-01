@@ -28,14 +28,19 @@ const Request = ({
   approvalStatus,
   reporter,
   isNeedApproval,
+  uid,
+  id,
 }: RequestProps) => {
   return (
     <PostBase
+      id={id}
+      type="request"
       userName={userName}
       createdAt={createdAt}
       tag={tag}
       name={name}
       typeTag={"request"}
+      uid={uid}
     >
       <div className="w-full flex flex-col gap-1 text-base font-normal text-black">
         <p>Mô tả: {description}</p>
@@ -43,8 +48,18 @@ const Request = ({
         <p>Kết thúc: {getFormatDateString(endAt)}</p>
         <p>
           Trạng thái: {getWording(approvalStatus)}
-          {decidedAt ? " lúc " + getFormatDateString(decidedAt) : ""}
-          {decisionDetail ? ". Mô tả: " + decisionDetail : ""}
+          {
+            <>
+              {approvalStatus === "pending" ? (
+                <></>
+              ) : (
+                <>
+                  {decidedAt ? " lúc " + getFormatDateString(decidedAt) : ""}
+                  {decisionDetail ? ". Mô tả: " + decisionDetail : ""}
+                </>
+              )}
+            </>
+          }
         </p>
 
         {reporter && (
@@ -55,7 +70,11 @@ const Request = ({
         )}
 
         {isNeedApproval && (
-          <ApproveButton color={getColorFromType("request")} />
+          <ApproveButton
+            type="request"
+            id={id}
+            color={getColorFromType("request")}
+          />
         )}
       </div>
     </PostBase>

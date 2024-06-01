@@ -8,16 +8,14 @@ import { HeartIcon } from "./SVG/index.tsx";
 import SaveIcon from "@/assets/images/Common/Bookmark.svg";
 import ShareIcon from "@/assets/images/Common/Share_iOS_Export.svg";
 import { routes } from "@/constants/layout.ts";
+import { User } from "@/services/type.ts";
+import { userService } from "@/services/user.service.ts";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import LongContent from "../PostBase/LongContent/index.tsx";
 import PostBase, { PostBaseType } from "../PostBase/index.tsx";
 import PostFiles from "./PostFiles/index.tsx";
 import PostMention from "./PostMention/index.tsx";
-import { useAppSelector } from "@/redux/hooks.ts";
-import { selectSignedUser } from "@/redux/features/accountSlice.ts";
-import { useQuery } from "@tanstack/react-query";
-import { User } from "@/services/type.ts";
-import { userService } from "@/services/user.service.ts";
 
 export type PostProps = PostBaseType & {
   id: number;
@@ -27,10 +25,13 @@ export type PostProps = PostBaseType & {
   attachedFiles?: string[];
   isDetail?: boolean;
   eventId?: string;
+  comments?: number;
+  likes?: number;
 };
 
 const Post = ({
   id,
+  uid,
   userName,
   createdAt,
   tag,
@@ -41,31 +42,27 @@ const Post = ({
   attachedFiles,
   isDetail,
   avatar,
+  comments,
 }: PostProps) => {
   const [isDetailAttachedFiles, setIsDetailAttachedFiles] =
     useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const signedUser = useAppSelector(selectSignedUser);
-
   const { data: users } = useQuery<User[]>({
     queryKey: ["all_users"],
     queryFn: async () => {
       const res = await userService.getAll();
-      if (signedUser && signedUser.uid) {
-        return res.filter(
-          (user: User) => user?.uid !== (signedUser?.uid ?? "")
-        );
-      } else {
-        return res;
-      }
+      return res;
     },
   });
 
   return (
     <div>
       <PostBase
+        uid={uid}
+        id={id}
+        type="post"
         userName={userName}
         createdAt={createdAt}
         tag={tag}
@@ -87,8 +84,10 @@ const Post = ({
           <PostImages imageUrls={imageUrls} />
 
           <PostMention
-            mentionData={tags.map((item) => {
-              const email = users?.find((user) => user?.uid === item)?.email;
+            mentionData={tags?.map((item) => {
+              const email = users
+                ?.find((user) => user?.uid === item)
+                ?.email.split("@")[0];
               return email ?? "";
             })}
           />
@@ -125,7 +124,12 @@ const Post = ({
           {/* Bottom */}
           <div className={`flex items-center`}>
             <div className={`flex items-center gap-4 flex-1`}>
-              <div className={`flex items-center gap-2`}>
+              <div
+                className={`flex items-center gap-2`}
+                style={{
+                  display: "none",
+                }}
+              >
                 <button onClick={() => setIsLiked(!isLiked)}>
                   <HeartIcon isFilled={isLiked} />
                 </button>
@@ -135,11 +139,18 @@ const Post = ({
                 <button>
                   <img src={CommentIcon} />
                 </button>
-                <span className={` text-sm font-normal text-black`}>340k</span>
+                <span className={` text-sm font-normal text-black`}>
+                  {comments ?? 0}
+                </span>
               </div>
             </div>
 
-            <div className={`flex items-center gap-2`}>
+            <div
+              className={`flex items-center gap-2`}
+              style={{
+                display: "none",
+              }}
+            >
               <button>
                 <img src={SaveIcon} />
               </button>

@@ -75,7 +75,7 @@ const ProfileInfo = ({ data }: { data?: User }) => {
       </div>
 
       {/*  */}
-      <ProfileTabs />
+      <ProfileTabs data={data} />
     </div>
   );
 };

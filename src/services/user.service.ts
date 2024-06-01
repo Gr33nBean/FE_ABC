@@ -66,4 +66,33 @@ export const userService = {
       return [];
     }
   },
+  create: async (
+    data: {
+      uid: string;
+      departmentId: string;
+      grade: "employee";
+      username: string;
+      birthday: number;
+      email: string;
+      avatar: string;
+      description: string;
+      permissionIdToCRUD: ["admin", "admin", "admin", "admin"];
+      status: "create";
+    }[]
+  ) => {
+    try {
+      const res = await fetch(domain + "/User", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json());
+      console.log(res);
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
 };

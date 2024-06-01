@@ -50,7 +50,7 @@ const Layout = () => {
                     dispatch(setIsOpenCreate(true));
                   }}
                 >
-                  Đăng bài
+                  Thêm mới
                 </button>
               </div>
 

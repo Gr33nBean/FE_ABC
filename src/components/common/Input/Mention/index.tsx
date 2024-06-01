@@ -11,7 +11,7 @@ import {
 } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PostMention from "../../Post/PostMention";
 
 const Mention = ({
@@ -31,22 +31,20 @@ const Mention = ({
     queryKey: ["all_users"],
     queryFn: async () => {
       const res = await userService.getAll();
-      if (signedUser) {
-        return res.filter(
-          (user: User) => user?.uid !== (signedUser?.uid ?? "")
-        );
-      } else {
-        return res;
-      }
+      return res;
     },
   });
 
+  const dataExceptSignedUser = useMemo(() => {
+    return data ? data.filter((user) => user?.uid !== signedUser?.uid) : [];
+  }, [data, signedUser?.uid]);
+
   const [query, setQuery] = useState<string>("");
 
-  const filteredPeople = data
+  const filteredPeople = dataExceptSignedUser
     ? query === ""
-      ? data
-      : data?.filter((person) => {
+      ? dataExceptSignedUser
+      : dataExceptSignedUser?.filter((person) => {
           return person.username.toLowerCase().includes(query.toLowerCase());
         })
     : [];
@@ -63,7 +61,9 @@ const Mention = ({
         {mentionData.length > 0 && (
           <div className="flex items-center justify-between">
             <PostMention
-              mentionData={mentionData?.map((item) => item?.email ?? "")}
+              mentionData={mentionData?.map(
+                (item) => item?.email?.split("@")[0] ?? ""
+              )}
             />
 
             <button

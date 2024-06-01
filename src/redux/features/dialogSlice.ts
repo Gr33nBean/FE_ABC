@@ -7,6 +7,8 @@ interface DialogState {
   };
   isOpenCreate: boolean;
   isLoading: boolean;
+  isOpenCreateComment: number;
+  isCreatePostInEvent: number;
 }
 
 const initialState: DialogState = {
@@ -16,6 +18,8 @@ const initialState: DialogState = {
   },
   isOpenCreate: false,
   isLoading: false,
+  isOpenCreateComment: -1,
+  isCreatePostInEvent: -1,
 };
 
 const dialogSlice = createSlice({
@@ -39,6 +43,14 @@ const dialogSlice = createSlice({
     setIsLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
+
+    setIsOpenCreateComment(state, action: PayloadAction<number>) {
+      state.isOpenCreateComment = action.payload;
+    },
+
+    setIsCreatePostInEvent(state, action: PayloadAction<number>) {
+      state.isCreatePostInEvent = action.payload;
+    },
   },
 });
 
@@ -51,6 +63,17 @@ export const selectIsOpenCreate = (state: { dialog: DialogState }) =>
 export const selectIsLoading = (state: { dialog: DialogState }) =>
   state.dialog.isLoading;
 
-export const { setIsOpenViewImage, setIsOpenCreate, setIsLoading } =
-  dialogSlice.actions;
+export const selectIsOpenCreateComment = (state: { dialog: DialogState }) =>
+  state.dialog.isOpenCreateComment;
+
+export const selectIsCreatePostInEvent = (state: { dialog: DialogState }) =>
+  state.dialog.isCreatePostInEvent;
+
+export const {
+  setIsOpenViewImage,
+  setIsOpenCreate,
+  setIsLoading,
+  setIsOpenCreateComment,
+  setIsCreatePostInEvent,
+} = dialogSlice.actions;
 export default dialogSlice.reducer;

@@ -28,7 +28,7 @@ const AvatarButton = () => {
             {signedUser?.username.split(" ").reverse()[0]}
           </span>
           <span className="font-normal block truncate">
-            @{signedUser?.email}
+            @{signedUser?.email?.split("@")[0]}
           </span>
         </p>
 

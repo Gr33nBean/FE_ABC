@@ -99,6 +99,7 @@ const Dates = ({
                       name={item?.name ?? ""}
                       room={item?.resource?.name ?? ""}
                       time={new Date(item.startAt * 1000)}
+                      des={item?.description ?? ""}
                     />
                   </div>
                 ))}

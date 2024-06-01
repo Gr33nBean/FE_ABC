@@ -1,13 +1,13 @@
 const PostMention = ({ mentionData }: { mentionData: string[] }) => {
   return (
     <p className={`flex items-center gap-2 text-dark-gray`}>
-      {mentionData.slice(0, 3).map((item, index) => (
+      {mentionData?.slice(0, 3).map((item, index) => (
         <span
           key={index}
-          className={`font-semibold text-blue `}
+          className={`text-sm font-semibold text-blue `}
         >{`@${item}`}</span>
       ))}
-      {mentionData.length > 3 && (
+      {mentionData?.length > 3 && (
         <span className={` font-normal`}>{`+${
           mentionData.length - 3
         } người khác`}</span>

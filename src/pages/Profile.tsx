@@ -1,4 +1,5 @@
 import BackBar from "@/components/common/Layout/BackBar";
+import Loading from "@/components/common/Layout/Loading";
 import ProfileInfo from "@/components/ui/Profile/ProfileInfo";
 import { selectSignedUser } from "@/redux/features/accountSlice";
 import { useAppSelector } from "@/redux/hooks";
@@ -12,7 +13,7 @@ const Profile = () => {
   const signedUser = useAppSelector(selectSignedUser);
 
   const { data } = useQuery<User | undefined>({
-    queryKey: ["profile"],
+    queryKey: [uid],
     queryFn: async () => {
       if (uid) {
         const res = await userService.getUser([uid]);
@@ -29,7 +30,13 @@ const Profile = () => {
         <p className="text-[20px] font-semibold text-black">{data?.username}</p>
       </BackBar>
 
-      <ProfileInfo data={uid ? data : signedUser} />
+      {data ? (
+        <ProfileInfo data={uid ? data : signedUser} />
+      ) : (
+        <div className="w-full py-10">
+          <Loading />
+        </div>
+      )}
     </div>
   );
 };

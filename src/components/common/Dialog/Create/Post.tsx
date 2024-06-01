@@ -1,7 +1,12 @@
 import Button from "@/components/ui/Home/Button";
 import { TABS } from "@/constants";
 import { selectSignedUser } from "@/redux/features/accountSlice";
-import { setIsLoading, setIsOpenCreate } from "@/redux/features/dialogSlice";
+import {
+  selectIsCreatePostInEvent,
+  setIsCreatePostInEvent,
+  setIsLoading,
+  setIsOpenCreate,
+} from "@/redux/features/dialogSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { postTypeService } from "@/services/postType.service";
 import { PostType, User } from "@/services/type";
@@ -27,6 +32,8 @@ type createPost = {
 
 const Post = () => {
   const signedUser = useAppSelector(selectSignedUser);
+  const isCreatePostInEvent = useAppSelector(selectIsCreatePostInEvent);
+
   const { data } = useQuery<PostType[]>({
     queryKey: ["home_tabs"],
     queryFn: async () => {
@@ -49,10 +56,10 @@ const Post = () => {
   });
 
   const onSubmit: SubmitHandler<createPost> = async (data) => {
-    dispatch(setIsLoading(true));
     if (!signedUser?.uid) {
       return;
     }
+    dispatch(setIsLoading(true));
     const payload: {
       postTypeId: string;
       creatorUid: string;
@@ -66,7 +73,7 @@ const Post = () => {
     } = {
       postTypeId: data.postTypeId,
       creatorUid: signedUser.uid,
-      eventId: null,
+      eventId: isCreatePostInEvent == -1 ? null : isCreatePostInEvent,
       mentionUid: mentionData.map((item) => item.uid),
       title: data.title,
       content: data.content,
@@ -90,6 +97,7 @@ const Post = () => {
     setMentionData([]);
     dispatch(setIsLoading(false));
     dispatch(setIsOpenCreate(false));
+    dispatch(setIsCreatePostInEvent(-1));
   };
 
   /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -125,7 +133,12 @@ const Post = () => {
             >
               {[
                 { id: "", name: "" },
-                ...(data?.filter((item) => item.id != TABS.EVENT) ?? []),
+                ...(data?.filter((item) => {
+                  if (isCreatePostInEvent != -1) {
+                    return item.id == TABS.EVENT;
+                  }
+                  return item.id != TABS.EVENT;
+                }) ?? []),
               ].map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
@@ -180,7 +193,7 @@ const Post = () => {
         {/*  */}
         <div className="flex items-center w-full gap-2">
           <div className="size-[48px] flex justify-center items-center">
-            <Avatar src={signedUser?.avatar} className="size-[26px]" />
+            <Avatar src={signedUser?.avatar} className="!size-[26px]" />
           </div>
           <div className="flex-1 flex items-center gap-3">
             <p className="flex-1 text- font-light text-dark-gray">

@@ -1,59 +1,78 @@
 import CreatePost from "@/components/common/CreatePost";
-import Event, { EventProps } from "@/components/common/Event";
+import Event from "@/components/common/Event";
 import BackBar from "@/components/common/Layout/BackBar";
-import Post, { PostProps } from "@/components/common/Post";
+import Loading from "@/components/common/Layout/Loading";
+import Post from "@/components/common/Post";
+import { selectIsLoading } from "@/redux/features/dialogSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { eventService } from "@/services/event.service";
+import { postService } from "@/services/post.service";
+import { Event as EventDataType, Post as PostDataType } from "@/services/type";
+import {
+  mapEventToUIObject,
+  mapPostToUIObject,
+  sortByTimestamp,
+} from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 const EventDetail = () => {
   const { id } = useParams();
-  console.log(id);
+  const isJustCreateComment = useAppSelector(selectIsLoading);
 
-  const data: EventProps = {
-    id: 123,
-    userName: "phtrhuy",
-    createdAt: "12 giờ",
-    tag: "Welcome",
-    name: "Chào đón thực tập sinh",
-    content:
-      "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-    joinAmount: 200,
-    room: "A1.03",
-    from: "08:00 10/05/2024",
-    to: "09:00 10/05/2024",
-    isDetail: true,
-  };
+  const { data: detailData } = useQuery<EventDataType>({
+    queryKey: [`event_detail_${id}`, !isJustCreateComment],
+    queryFn: async () => {
+      if (!id) {
+        return undefined;
+      }
+      const res = await eventService.getEventDetail([Number(id)]);
+      return res[0];
+    },
+  });
+
+  const { data: postData } = useQuery<PostDataType[]>({
+    queryKey: ["all_posts", !isJustCreateComment],
+    queryFn: async () => {
+      const res = await postService.getAll();
+      if (res) {
+        return res;
+      } else {
+        return [];
+      }
+    },
+    enabled: !!detailData,
+  });
 
   return (
     <div className="w-full ">
       <BackBar>
         <p className="text-[20px] font-semibold text-dark-gray">Quay lại</p>
       </BackBar>
+      {detailData && postData ? (
+        <>
+          <Event {...mapEventToUIObject(detailData)} />
 
-      <Event {...data} />
+          <CreatePost isCreatePostInEvent={detailData.id} />
+          {postData
+            .filter((item) => item?.eventId === detailData.id)
+            .sort((a, b) => sortByTimestamp(a.createAt, b.createAt))
+            .map((item, index) => (
+              <div key={index}>
+                <Post {...mapPostToUIObject(item)} />
+              </div>
+            ))}
 
-      <CreatePost />
-
-      {[
-        ...Array.from({ length: 3 }).fill({
-          id: "123",
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          tag: "Sharing",
-          name: "Chào đón thực tập sinh",
-          content:
-            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-          imageUrls: [
-            "https://photo-zmp3.zadn.vn/avatars/5/5/b/7/55b787b8189794c412c305027d1f239d.jpg",
-            "https://images2.thanhnien.vn/528068263637045248/2023/11/5/dieu-kien-3-16991575841451246800633.jpeg",
-          ],
-          tags: ["vhng", "trhph", "trtrith", "trtrith", "trtrith", "trtrith"],
-          attachedFiles: ["test1.png", "test1.png", "test1.png"],
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Post {...(item as PostProps)} />
+          {postData.filter((item) => item?.eventId === detailData.id).length ===
+            0 && (
+            <p className="text-center py-2 text-dark-gray">Chưa có bài đăng</p>
+          )}
+        </>
+      ) : (
+        <div className="w-full py-10">
+          <Loading />
         </div>
-      ))}
+      )}
     </div>
   );
 };

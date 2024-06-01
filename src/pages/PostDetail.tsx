@@ -1,28 +1,46 @@
-import Comment, { CommentProps } from "@/components/common/Comment";
+import Comment from "@/components/common/Comment";
 import CreatePost from "@/components/common/CreatePost";
 import BackBar from "@/components/common/Layout/BackBar";
-import Post, { PostProps } from "@/components/common/Post";
+import Loading from "@/components/common/Layout/Loading";
+import Post from "@/components/common/Post";
+import {
+  selectIsLoading,
+  setIsOpenCreateComment,
+} from "@/redux/features/dialogSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { commentService } from "@/services/comment.service";
+import { postService } from "@/services/post.service";
+import { PostComment, Post as PostDataType } from "@/services/type";
+import {
+  mapCommentToUIObject,
+  mapPostToUIObject,
+  sortByTimestamp,
+} from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 const PostDetail = () => {
   const { id } = useParams();
-  console.log(id);
+  const isJustCreateComment = useAppSelector(selectIsLoading);
+  const dispatch = useAppDispatch();
+  const { data: detailData } = useQuery<PostDataType>({
+    queryKey: [`post_detail_${id}`, !isJustCreateComment],
+    queryFn: async () => {
+      if (!id) {
+        return undefined;
+      }
+      const res = await postService.getPostDetail([Number(id)]);
+      return res[0];
+    },
+  });
 
-  const data: PostProps = {
-    id: 123,
-    userName: "phtrhuy",
-    createdAt: "12 giờ",
-    tag: "Sharing",
-    name: "Chào đón thực tập sinh",
-    content:
-      "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-    imageUrls: [
-      "https://photo-zmp3.zadn.vn/avatars/5/5/b/7/55b787b8189794c412c305027d1f239d.jpg",
-      "https://images2.thanhnien.vn/528068263637045248/2023/11/5/dieu-kien-3-16991575841451246800633.jpeg",
-    ],
-    tags: ["vhng", "trhph", "trtrith", "trtrith", "trtrith", "trtrith"],
-    attachedFiles: ["test1.png", "test1.png", "test1.png"],
-    isDetail: true,
-  };
+  const { data: commentData } = useQuery<PostComment[]>({
+    queryKey: [`all_comments`, !isJustCreateComment],
+    queryFn: async () => {
+      const res = await commentService.getAll();
+      return res;
+    },
+    enabled: !!detailData,
+  });
 
   return (
     <div className="w-full ">
@@ -30,32 +48,41 @@ const PostDetail = () => {
         <p className="text-[20px] font-semibold text-dark-gray">Quay lại</p>
       </BackBar>
 
-      <Post {...data} />
+      {detailData && commentData ? (
+        <>
+          <Post {...mapPostToUIObject(detailData)} isDetail={true} />
 
-      <CreatePost
-        placeholder="Đăng bình luận"
-        buttonText="Bình luận"
-        isComment={true}
-      />
+          <div
+            className="cursor-pointer w-full"
+            onClick={() => {
+              dispatch(setIsOpenCreateComment(detailData.id));
+            }}
+          >
+            <CreatePost
+              placeholder="Đăng bình luận"
+              buttonText="Bình luận"
+              isComment={true}
+            />
+          </div>
 
-      {[
-        ...Array.from({ length: 3 }).fill({
-          id: "123",
-          userName: "phtrhuy",
-          createdAt: "12 giờ",
-          content:
-            "Chào đón các không thực tập sinh đầu. Mọi người thamgia cho vui nhé!",
-          imageUrls: [
-            "https://photo-zmp3.zadn.vn/avatars/5/5/b/7/55b787b8189794c412c305027d1f239d.jpg",
-            "https://images2.thanhnien.vn/528068263637045248/2023/11/5/dieu-kien-3-16991575841451246800633.jpeg",
-          ],
-          attachedFiles: ["test1.png", "test1.png", "test1.png"],
-        }),
-      ].map((item, index) => (
-        <div key={index}>
-          <Comment {...(item as CommentProps)} />
+          {commentData
+            .filter((item) => item.postId === detailData.id)
+            .sort((a, b) => sortByTimestamp(a.createAt, b.createAt))
+            .map((item, index) => (
+              <div key={index}>
+                <Comment {...mapCommentToUIObject(item)} />
+              </div>
+            ))}
+          {commentData.filter((item) => item.postId === detailData.id)
+            .length === 0 && (
+            <p className="text-center py-2 text-dark-gray">Chưa có bình luận</p>
+          )}
+        </>
+      ) : (
+        <div className="w-full py-10">
+          <Loading />
         </div>
-      ))}
+      )}
     </div>
   );
 };

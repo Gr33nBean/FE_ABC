@@ -1,12 +1,15 @@
 import Button from "@/components/ui/Home/Button";
-import { TABS } from "@/constants";
+import { EventType as EventSample } from "@/constants/type";
 import { selectSignedUser } from "@/redux/features/accountSlice";
-import { useAppSelector } from "@/redux/hooks";
-import { eventTypeService } from "@/services/eventType.service";
+import { setIsLoading, setIsOpenCreate } from "@/redux/features/dialogSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { eventService } from "@/services/event.service";
 import { EventType, User } from "@/services/type";
+import { convertDateToTimestamp } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Avatar from "../../Avatar";
 import Input from "../../Input";
 import Mention from "../../Input/Mention";
@@ -23,12 +26,16 @@ type createEvent = {
 };
 const Event = () => {
   const signedUser = useAppSelector(selectSignedUser);
+  const dispatch = useAppDispatch();
 
   const { data } = useQuery<EventType[]>({
     queryKey: ["event_type"],
     queryFn: async () => {
-      const res = await eventTypeService.getAll();
-      return res;
+      // const res = await eventTypeService.getAll();
+      // return res;
+      return EventSample.items.map(
+        (item) => ({ id: item.label, name: item.label_vn } as EventType)
+      );
     },
   });
   const [participantsUid, setParticipantsUid] = useState<User[]>([]);
@@ -42,10 +49,45 @@ const Event = () => {
     defaultValues: { reporterUid: signedUser?.uid, status: "create" },
   });
 
-  const onSubmit: SubmitHandler<createEvent> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<createEvent> = async (data) => {
+    if (!signedUser?.uid) {
+      return;
+    }
+    dispatch(setIsLoading(true));
 
-    return;
+    const payload: {
+      eventTypeId: string;
+      reporterUid: string;
+      // resourceId: number;
+      postsId: number[];
+      paticipantsUid: string[];
+      permissionIdToCRUDPost: ["employee", "employee", "employee", "employee"];
+      name: string;
+      description: string;
+      startAt: number;
+      endAt: number;
+      status: "create";
+    } = {
+      eventTypeId: data.eventTypeId,
+      reporterUid: data.reporterUid,
+      postsId: [],
+      paticipantsUid: participantsUid?.map((item) => item.uid) ?? [],
+      permissionIdToCRUDPost: ["employee", "employee", "employee", "employee"],
+      name: data.name,
+      description: data.description,
+      startAt: convertDateToTimestamp(new Date(data.startAt)),
+      endAt: convertDateToTimestamp(new Date(data.endAt)),
+      status: "create",
+    };
+
+    console.log(payload);
+
+    const res = await eventService.createEvent([payload]);
+    if (res) {
+      toast.success("Tạo sự kiện thành công");
+    }
+    dispatch(setIsLoading(false));
+    dispatch(setIsOpenCreate(false));
     reset();
     setParticipantsUid([]);
   };
@@ -77,10 +119,7 @@ const Event = () => {
               label="Loại sự kiện"
               {...register("eventTypeId", { required: true })}
             >
-              {[
-                { id: "", name: "" },
-                ...(data?.filter((item) => item.id != TABS.EVENT) ?? []),
-              ].map((item, index) => (
+              {[{ id: "", name: "" }, ...(data ?? [])].map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
                 </option>
@@ -144,7 +183,7 @@ const Event = () => {
         {/*  */}
         <div className="flex items-center w-full gap-2">
           <div className="size-[48px] flex justify-center items-center">
-            <Avatar src={signedUser?.avatar} className="size-[26px]" />
+            <Avatar src={signedUser?.avatar} className="!size-[26px]" />
           </div>
           <div className="flex-1 flex items-center gap-3">
             <p className="flex-1 text- font-light text-dark-gray">

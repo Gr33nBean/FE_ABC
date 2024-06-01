@@ -15,6 +15,7 @@ import PostDetail from "./pages/PostDetail";
 import Profile from "./pages/Profile";
 import Resource from "./pages/Resource";
 import Search from "./pages/Search";
+import Comment from "./components/common/Dialog/Create/Comment";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -53,12 +54,10 @@ const router = createBrowserRouter([
       {
         path: routes.profile,
         element: <Profile />,
-        children: [
-          {
-            path: routes.profile + "/:uid",
-            element: <Profile />,
-          },
-        ],
+      },
+      {
+        path: routes.user + "/:uid",
+        element: <Profile />,
       },
       {
         path: routes.post + "/:id",
@@ -82,6 +81,7 @@ function App() {
       <RouterProvider router={router} />
       <ViewImage />
       <Create />
+      <Comment />
       <ProcessLoading />
     </Suspense>
   );

@@ -4,7 +4,6 @@ import FolderIcon from "@/assets/images/Common/Folder.svg";
 import DownloadFileIcon from "@/assets/images/Common/Download_Package.svg";
 
 export type CommentProps = PostBaseType & {
-  id: string;
   content: string;
   imageUrls: string[];
   attachedFiles?: string[];
@@ -17,11 +16,16 @@ const Comment = ({
   content,
   imageUrls,
   attachedFiles,
+  avatar,
 }: CommentProps) => {
-  console.log(id);
-
   return (
-    <PostBase userName={userName} createdAt={createdAt}>
+    <PostBase
+      userName={userName}
+      createdAt={createdAt}
+      avatar={avatar}
+      id={id}
+      type="comment"
+    >
       <div className="w-full flex flex-col gap-1">
         <p className="text-base font-normal text-black">{content}</p>
         <PostImages imageUrls={imageUrls} />

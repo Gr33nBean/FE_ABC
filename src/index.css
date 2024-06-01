@@ -61,6 +61,10 @@
   -webkit-line-clamp: 3;
 }
 
+.paragraph-overflow-ellipsis-1 {
+  -webkit-line-clamp: 1 !important;
+}
+
 .paragraph-overflow-ellipsis-3 {
   -webkit-line-clamp: 3 !important;
 }

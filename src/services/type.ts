@@ -113,13 +113,14 @@ export interface PostLike {
 
 export interface PostComment {
   id: number;
-  userId: string; // reference to User.uid
+  userId: string;
+  user?: User; // reference to User.uid
   postId: number; // reference to Post.id
   content?: string; // text | null
-  images: FileType[];
+  images: string[];
   files: FileType[];
-  createAt: string; // timestamp
-  updateAt: string; // timestamp
+  createAt: number; // timestamp
+  updateAt: number; // timestamp
   status: StatusType;
 }
 
@@ -230,7 +231,8 @@ export interface RequestType {
   id: string;
   name: string;
   description: string; // text
-  approvalDepartmentId: number; // reference to Department.id
+  approvalDepartmentId: string; // reference to Department.id
+  department?: Department;
   minApprovalGrade: Grade;
   permissionIdToCRUD: Grade[];
   createAt: string; // timestamp
@@ -241,16 +243,19 @@ export interface RequestType {
 export interface Request {
   id: number;
   requesterUid: string; // reference to User.uid
-  requestType: number; // reference to RequestType.id
+  requester?: User;
+  requestTypeId: string; // reference to RequestType.id
+  requestType?: RequestType;
   reporterUid: string; // reference to User.uid
+  reporter?: User;
   name: string;
   description: string; // text
-  startAt: string; // timestamp
-  endAt: string; // timestamp
+  startAt: number; // timestamp
+  endAt: number; // timestamp
   approvalStatus: ApprovalStatus;
-  decidedAt: string; // timestamp
+  decidedAt: number; // timestamp
   decisionDetail?: string; // text | null
-  createAt: string; // timestamp
-  updateAt: string; // timestamp
+  createAt: number; // timestamp
+  updateAt: number; // timestamp
   status: StatusType;
 }

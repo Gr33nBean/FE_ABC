@@ -7,10 +7,12 @@ const ShortEvent = ({
   name,
   room,
   time,
+  des,
 }: {
   id: number;
   name: string;
   room: string;
+  des: string;
   time: Date;
 }) => {
   const navigate = useNavigate();
@@ -25,8 +27,9 @@ const ShortEvent = ({
       <p className="w-full font-semibold text-[18px] text-black truncate">
         {name}
       </p>
-      <p className="w-full font-normal text-[16px] text-dark-gray text-ellipsis overflow-hidden whitespace-nowrap">
-        {room ? `Tại ${room} lúc ${getTime(time)}` : `Chưa rõ`}
+
+      <p className="w-full font-normal text-[16px] text-dark-gray paragraph-overflow-ellipsis paragraph-overflow-ellipsis-1 max-w-[260px]">
+        {room ? `Tại ${room} lúc ${getTime(time)}` : des}
       </p>
     </div>
   );

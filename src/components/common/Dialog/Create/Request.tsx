@@ -1,19 +1,24 @@
 import Button from "@/components/ui/Home/Button";
-import { TABS } from "@/constants";
 import { selectSignedUser } from "@/redux/features/accountSlice";
 import { useAppSelector } from "@/redux/hooks";
-import { eventTypeService } from "@/services/eventType.service";
-import { EventType } from "@/services/type";
+import { requestTypeService } from "@/services/requestType.service";
+import { RequestType } from "@/services/type";
 import { useQuery } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Avatar from "../../Avatar";
 import Input from "../../Input";
 import Select from "../../Input/Select";
 import Textarea from "../../Input/Textarea";
-type requestEvent = {
-  name: string;
+import { useDispatch } from "react-redux";
+import { setIsLoading, setIsOpenCreate } from "@/redux/features/dialogSlice";
+import { convertDateToTimestamp } from "@/utils";
+import { requestService } from "@/services/request.service";
+import toast from "react-hot-toast";
+type createRequest = {
+  requesterUid: string;
+  requestTypeId: string;
   reporterUid: string;
-  eventTypeId: string;
+  name: string;
   description: string;
   startAt: string;
   endAt: string;
@@ -21,11 +26,13 @@ type requestEvent = {
 };
 const Request = () => {
   const signedUser = useAppSelector(selectSignedUser);
+  console.log(signedUser);
 
-  const { data } = useQuery<EventType[]>({
-    queryKey: ["event_type"],
+  const dispatch = useDispatch();
+  const { data: requestTypes } = useQuery<RequestType[]>({
+    queryKey: ["request_type"],
     queryFn: async () => {
-      const res = await eventTypeService.getAll();
+      const res = await requestTypeService.getAll();
       return res;
     },
   });
@@ -35,14 +42,50 @@ const Request = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<requestEvent>({
-    defaultValues: { reporterUid: signedUser?.uid, status: "create" },
+  } = useForm<createRequest>({
+    defaultValues: {
+      requesterUid: signedUser?.uid,
+      status: "create",
+    },
   });
 
-  const onSubmit: SubmitHandler<requestEvent> = (data) => {
+  const onSubmit: SubmitHandler<createRequest> = async (data) => {
     console.log(data);
+    if (!signedUser?.uid) {
+      return;
+    }
+    dispatch(setIsLoading(true));
 
-    return;
+    const payload: {
+      requesterUid: string;
+      requestTypeId: string;
+      name: string;
+      description: string;
+      startAt: number;
+      endAt: number;
+      approvalStatus: "pending";
+      status: "create";
+      reporterUid: string;
+    } = {
+      requesterUid: data.requesterUid,
+      reporterUid:
+        requestTypes?.find((item) => item.id === data.requestTypeId)?.department
+          ?.directorUid ?? signedUser?.uid,
+      requestTypeId: data.requestTypeId,
+      name: data.name,
+      description: data.description,
+      startAt: convertDateToTimestamp(new Date(data.startAt)),
+      endAt: convertDateToTimestamp(new Date(data.endAt)),
+      approvalStatus: "pending",
+      status: "create",
+    };
+
+    const res = await requestService.createRequest([payload]);
+    if (res) {
+      toast.success("Tạo yêu cầu thành công");
+    }
+    dispatch(setIsLoading(false));
+    dispatch(setIsOpenCreate(false));
     reset();
   };
 
@@ -71,16 +114,15 @@ const Request = () => {
             </div>
             <Select
               label="Loại yêu cầu"
-              {...register("eventTypeId", { required: true })}
+              {...register("requestTypeId", { required: true })}
             >
-              {[
-                { id: "", name: "" },
-                ...(data?.filter((item) => item.id != TABS.EVENT) ?? []),
-              ].map((item, index) => (
-                <option key={index} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
+              {[{ id: "", name: "" }, ...(requestTypes ?? [])].map(
+                (item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
+                )
+              )}
             </Select>
             <Textarea
               rows={3}
@@ -89,11 +131,23 @@ const Request = () => {
               {...register("description", { maxLength: 300 })}
             />
 
-            <Input
-              type="datetime-local"
-              label="Bắt đầu"
-              {...register("startAt", { required: true })}
-            />
+            <div>
+              <Input
+                type="datetime-local"
+                label="Bắt đầu"
+                min={new Date().toISOString()}
+                {...register("startAt", {
+                  required: true,
+                  validate: (value) =>
+                    new Date(value).getTime() > new Date().getTime(),
+                })}
+              />
+              {errors.startAt && (
+                <p className="text-pink text-xs">
+                  Ngày bắt đầu không trước hiện tại
+                </p>
+              )}
+            </div>
 
             {/* keep endat is always after startat */}
             <div>
@@ -120,7 +174,7 @@ const Request = () => {
         {/*  */}
         <div className="flex items-center w-full gap-2">
           <div className="size-[48px] flex justify-center items-center">
-            <Avatar src={signedUser?.avatar} className="size-[26px]" />
+            <Avatar src={signedUser?.avatar} className="!size-[26px]" />
           </div>
           <div className="flex-1 flex items-center gap-3">
             <p className="flex-1 text- font-light text-dark-gray">
@@ -136,7 +190,7 @@ const Request = () => {
         <p className="flex-1 text-sm font-light text-dark-gray">
           Tất cả mọi người có thể xem và đăng bài
         </p>
-        <Button type="submit" text="Tạo yêu cầus" className="px-4" />
+        <Button type="submit" text="Tạo yêu cầu" className="px-4" />
       </div>
     </form>
   );

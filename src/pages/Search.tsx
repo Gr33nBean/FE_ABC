@@ -1,6 +1,7 @@
 import Avatar from "@/components/common/Avatar";
 import Tabs from "@/components/common/Tabs";
 import Tag from "@/components/common/Tag";
+import Button from "@/components/ui/Home/Button";
 import { TABS } from "@/constants";
 import { getVNLabel, getWording } from "@/constants/type";
 import { useState } from "react";
@@ -18,6 +19,9 @@ const Search = () => {
   const onChangeTab = (value: string) => {
     setSelectedTab(value);
   };
+
+  const [searchValue, setSearchValue] = useState<string>("");
+
   return (
     <div className="w-full">
       {/*  */}
@@ -40,9 +44,23 @@ const Search = () => {
             </svg>
 
             <input
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
               placeholder="Tìm kiếm"
               className="flex-1 bg-transparent outline-none text-lg font-normal"
             />
+
+            <div
+              style={{
+                opacity: searchValue ? 1 : 0,
+              }}
+            >
+              <Button
+                text="Tìm kiếm"
+                className="!py-0 px-4"
+                onClick={() => setSearchValue("")}
+              />
+            </div>
           </div>
         </div>
         <Tabs

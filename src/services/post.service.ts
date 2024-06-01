@@ -60,4 +60,36 @@ export const postService = {
       return [];
     }
   },
+
+  getPostDetail: async (ids: number[]) => {
+    try {
+      const res = await fetch(domain + "/Post/get", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ids),
+      }).then((res) => res.json());
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
+
+  deletePost: async (ids: number[]) => {
+    try {
+      const res = await fetch(domain + "/Post", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ids),
+      }).then((res) => res);
+
+      return res;
+    } catch (error) {
+      return [];
+    }
+  },
 };

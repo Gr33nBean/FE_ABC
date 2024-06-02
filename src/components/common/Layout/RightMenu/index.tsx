@@ -3,10 +3,13 @@ import Calendar from "../../Calendar";
 import { useQuery } from "@tanstack/react-query";
 import { Event } from "@/services/type";
 import { eventService } from "@/services/event.service";
+import { useAppSelector } from "@/redux/hooks";
+import { selectIsLoading } from "@/redux/features/dialogSlice";
 
 const RightMenu = () => {
+  const isLoading = useAppSelector(selectIsLoading);
   const { data } = useQuery<Event[]>({
-    queryKey: ["all_events"],
+    queryKey: ["all_events", !isLoading],
     queryFn: async () => {
       const res = await eventService.getAll();
       if (res) {
